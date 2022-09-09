@@ -163,3 +163,11 @@ exports.unlikePost = (req, res) => {
         return res.status(400).send(err);
     }
 };
+
+// A supprimer *********************************************************************
+exports.deleteAllPosts = (req, res) => {
+    PostModel.deleteMany()
+        .then(() => res.status(200).json({ message: 'Tous les posts supprimés !' }))
+        .catch(error => res.status(400).json({ error }));
+};
+// A supprimer *********************************************************************

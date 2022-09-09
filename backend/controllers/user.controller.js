@@ -52,8 +52,16 @@ exports.getOneUser = (req, res) => {
     }).select('-password')
 }
 
-// A supprimer *******************************************************
-module.exports.getAllUsers = async (req, res) => {
-    const users = await UserModel.find().select('-password');
-    res.status(200).json(users)
+// A supprimer *****************************************************************************
+exports.getAllUsers = (req, res) => {
+    UserModel.find()
+        .then(users => res.status(200).json(users))
+        .catch(error => res.status(400).json({ error }));
 };
+
+exports.deleteAllUsers = (req, res) => {
+    UserModel.deleteMany()
+        .then(() => res.status(200).json({ message: 'Tous les utilisateurs supprimés !' }))
+        .catch(error => res.status(400).json({ error }));
+};
+// A supprimer *****************************************************************************
