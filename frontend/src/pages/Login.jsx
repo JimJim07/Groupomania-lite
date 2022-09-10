@@ -1,7 +1,7 @@
 import { useState } from 'react'
-import { Link /*, useNavigate*/ } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
-import colors from '../utils/colors'
+import colors from '../utils/style/colors'
 import logo from '../assets/icon-color.png'
 
 // Styled-components --------------------------------------
@@ -86,7 +86,7 @@ export default function Login() {
 
   const [txtError, setTxtError] = useState('')
 
-  //   const navigate = useNavigate()
+  const navigate = useNavigate()
 
   function addUser(e) {
     e.preventDefault()
@@ -109,6 +109,9 @@ export default function Login() {
           setTxtError('Paire identifiant/mot de passe incorrecte')
         } else {
           console.log(data)
+          localStorage.setItem('userId', data.userId)
+          localStorage.setItem('token', data.token)
+          navigate('/home')
         }
       })
   }

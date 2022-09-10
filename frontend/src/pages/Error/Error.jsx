@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import colors from '../../utils/colors'
+import colors from '../../utils/style/colors'
 import logoError from './logoError.png'
 import { Link } from 'react-router-dom'
 

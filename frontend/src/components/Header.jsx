@@ -1,6 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
-import colors from '../utils/colors'
+import colors from '../utils/style/colors'
 import logo from '../assets/icon-white.svg'
 
 // Styled-components -------------------------------------------------
@@ -12,7 +12,6 @@ const HeaderStyled = styled.header`
   padding: 5px;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 40px;
 `
 const ImgStyled = styled.img`
   width: 80%;
@@ -80,7 +79,7 @@ export default function Header() {
       <Nav>
         <LinkStyled to="/">Connexion</LinkStyled>
         <LinkStyled to="/signup">Inscription</LinkStyled>
-        <LinkStyled to="/accueil">Accueil</LinkStyled>
+        <LinkStyled to="/home">Home</LinkStyled>
         <LinkStyledRed to="/" onClick={deleteAllUsers}>
           Delete all users
         </LinkStyledRed>

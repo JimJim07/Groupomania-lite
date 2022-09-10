@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
-import { /*useNavigate,*/ Link } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import styled from 'styled-components'
-import colors from '../utils/colors'
+import colors from '../utils/style/colors'
 import logo from '../assets/icon-color.png'
 
 // Styled-components --------------------------------------
@@ -87,7 +87,7 @@ export default function Signup() {
 
   const [txtError, setTxtError] = useState('')
 
-  //   const navigate = useNavigate()
+  const navigate = useNavigate()
 
   function addUser(e) {
     e.preventDefault()
@@ -134,7 +134,7 @@ export default function Signup() {
           console.log(data)
           localStorage.setItem('userId', data.userId)
           localStorage.setItem('token', data.token)
-          //   navigate('/accueil')
+          navigate('/home')
         }
       })
   }
