@@ -1,6 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { useEffect } from 'react'
 import styled from 'styled-components'
 import iconDelete from '../assets/delete.png'
+import iconLike from '../assets/love.png'
+import iconUnlike from '../assets/unlove.png'
 import ModalPutPost from './ModalPutPost'
 
 // styled-components -----------------------------------------
@@ -32,7 +35,18 @@ const ContainerBTN = styled.div`
   // align-items: flex-end;
 `
 const DivMiddle = styled.div`
+  display: flex;
+  flex-direction: column;
   flex: 1;
+  justify-content: space-between;
+`
+const DivMiddle1 = styled.div`
+  display: flex;
+  align-items: center;
+`
+const IconLike = styled.img`
+  cursor: pointer;
+  margin-right: 5px;
 `
 
 // Composant  --------------------------------------------------
@@ -40,6 +54,50 @@ export default function Card(props) {
   // console.log(props)
   const userId = localStorage.getItem('userId')
   const token = localStorage.getItem('token')
+
+  const [nbLike, setNbLike] = useState(props.likers.length)
+
+  const [liked, setLiked] = useState(false)
+
+  function like(userId, postId) {
+    fetch(`http://localhost:7000/api/post/like/${postId}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ id: userId }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setLiked(true)
+        setNbLike(data.likers.length)
+      })
+      .catch((err) => console.log(err))
+  }
+
+  function unlike(userId, postId) {
+    fetch(`http://localhost:7000/api/post/unlike/${postId}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ id: userId }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setLiked(false)
+        setNbLike(data.likers.length)
+      })
+      .catch((err) => console.log(err))
+  }
+
+  useEffect(() => {
+    if (props.likers.includes(userId)) {
+      setLiked(true)
+    } else {
+      setLiked(false)
+    }
+  }, [props.likers, userId])
 
   function deletePost(postId, token) {
     fetch('http://localhost:7000/api/post/' + postId, {
@@ -58,12 +116,35 @@ export default function Card(props) {
       .then((data) => console.log(data))
       .catch((error) => console.log(error))
   }
+
+  // Syntaxe JSX --------------------------------------------------
   return (
     <ContainerCard>
       <Img src={props.imageUrl} alt="Images du Post" />
       <DivMiddle>
-        <p>{props.posterId}</p>
+        <p>Poster Id :{props.posterId}</p>
         <p>{props.post}</p>
+        <DivMiddle1>
+          {!liked ? (
+            <IconLike
+              onClick={() => like(userId, props.postId)}
+              src={iconUnlike}
+              alt="unlike"
+              height={30}
+              width={30}
+            />
+          ) : (
+            <IconLike
+              onClick={() => unlike(userId, props.postId)}
+              src={iconLike}
+              alt="like"
+              height={30}
+              width={30}
+            />
+          )}
+
+          <p>{nbLike}</p>
+        </DivMiddle1>
       </DivMiddle>
 
       {props.posterId === userId && (

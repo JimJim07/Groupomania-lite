@@ -100,7 +100,7 @@ export default function Home() {
     })
       .then((res) => res.json())
       .then((data) => {
-        // console.log(data)
+        console.log(data)
         setDataPost(data)
         setLoadPost(false)
       })
@@ -136,7 +136,7 @@ export default function Home() {
             </LinkStyled>
             <h3>{dataUser.pseudo} </h3>
             {/* <h3>{dataUser.email} </h3> */}
-            <h3>{dataUser._id} </h3>
+            {/* <h3>{dataUser._id} </h3> */}
           </DivTop>
           <FormHome callApiPost={callApiPost} />
           <ContainerCards>
@@ -147,6 +147,7 @@ export default function Home() {
                 posterId={item.posterId}
                 imageUrl={item.imageUrl}
                 post={item.post}
+                likers={item.likers}
                 callApiPost={callApiPost}
               />
             ))}

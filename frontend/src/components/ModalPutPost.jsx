@@ -69,6 +69,7 @@ const Button = styled.button`
 `
 // Composant ModalPut --------------------------------------------------
 export default function ModalPut(props) {
+  // console.log(props)
   const token = localStorage.getItem('token')
 
   const [post, setPost] = useState(props.post)

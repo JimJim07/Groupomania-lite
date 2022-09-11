@@ -45,7 +45,7 @@ const LinkStyledRed = styled(Link)`
   }
 `
 
-// Composant Header --------------------------------------------------
+// Composant --------------------------------------------------
 export default function Header() {
   const navigate = useNavigate()
 
