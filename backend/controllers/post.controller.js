@@ -3,21 +3,26 @@ const fs = require('fs');
 const PostModel = require('../models/Post.model');
 const UserModel = require('../models/User.model');
 
-exports.createPost = (req, res) => {
+exports.createPost = (req, res, next) => {
+    const postObject = req.body.post;
+    delete postObject._id;
+
     const post = new PostModel({
         posterId: req.body.posterId,
         post: req.body.post,
-        imageUrl: req.body.imageUrl,
+        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
         likers: [],
     });
+
     post.save()
-        .then(() => res.status(201).json({ message: 'Post enregistrée !' }))
-        .catch(error => res.status(400).json({ error }));
+        .then(() => { res.status(201).json({ message: 'Objet enregistré !' }) })
+        .catch(error => { res.status(400).json({ error }) })
 };
 
 
 exports.modifyPost = (req, res) => {
     if (req.file) {
+        console.log(req.body);
         PostModel.findOne({ _id: req.params.id })
             .then(post => {
                 if (post.posterId != req.auth.userId) {
@@ -27,7 +32,7 @@ exports.modifyPost = (req, res) => {
                     const filename = post.imageUrl.split('/images/')[1];
                     fs.unlink(`images/${filename}`, () => {
                         const postObject = {
-                            ...JSON.parse(req.body.post),
+                            post: req.body.post,
                             imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
                         }
                         PostModel.updateOne({ _id: req.params.id }, { ...postObject, _id: req.params.id })
@@ -60,46 +65,27 @@ exports.deleteOnePost = (req, res) => {
     PostModel.findOne({ _id: req.params.id })
         .then(post => {
             if (post.posterId != req.auth.userId) {
-                res.status(401).json({ message: 'Not authorized' });
+                res.status(401).json({ message: 'Non autoriser' });
             } else {
-                PostModel.findByIdAndRemove(req.params.id, (err) => {
-                    if (!err) res.send({ message: "Post deleted !" });
-                    else console.log("Delete error : " + err);
+                // Supprime l'image
+                const filename = post.imageUrl.split('/images/')[1];
+                fs.unlink(`images/${filename}`, () => {
+                    PostModel.deleteOne({ _id: req.params.id })
+                        .then(() => { res.status(200).json({ message: 'Post supprimée !' }) })
+                        .catch(error => res.status(401).json({ error }));
                 });
             }
         })
-        .catch((error) => {
-            res.status(400).json({ error });
+        .catch(error => {
+            res.status(500).json({ error });
         });
 };
 
-// For img
-// exports.deleteOnePost = (req, res) => {
+// exports.getOnePost = (req, res) => {
 //     PostModel.findOne({ _id: req.params.id })
-//         .then(post => {
-//             if (post.poster != req.auth.userId) {
-//                 res.status(401).json({ message: 'Non autoriser' });
-//             } else {
-//                 // Supprime l'image
-//                 const filename = post.imageUrl.split('/images/')[1];
-//                 fs.unlink(`images/${filename}`, () => {
-//                     PostModel.deleteOne({ _id: req.params.id })
-//                         .then(() => { res.status(200).json({ message: 'Post supprimée !' }) })
-//                         .catch(error => res.status(401).json({ error }));
-//                 });
-//             }
-//         })
-//         .catch(error => {
-//             res.status(500).json({ error });
-//         });
+//         .then(post => res.status(200).json(post))
+//         .catch(error => res.status(404).json({ error }));
 // };
-
-
-exports.getOnePost = (req, res) => {
-    PostModel.findOne({ _id: req.params.id })
-        .then(post => res.status(200).json(post))
-        .catch(error => res.status(404).json({ error }));
-};
 
 exports.getAllPosts = (req, res) => {
     // if (post.posterId != req.auth.userId) {
@@ -112,7 +98,6 @@ exports.getAllPosts = (req, res) => {
 };
 
 exports.likePost = (req, res) => {
-    console.log(req.body);
     try {
         PostModel.findByIdAndUpdate(
             req.params.id,

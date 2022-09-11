@@ -41,54 +41,50 @@ export default function FormHome(props) {
   const userId = localStorage.getItem('userId')
   const token = localStorage.getItem('token')
 
-  const [imageUrl, setImageUrl] = useState('')
   const [post, setPost] = useState('')
 
-  function submitForm(e) {
-    e.preventDefault()
-    const infoPost = {
-      posterId: userId,
-      imageUrl: imageUrl,
-      post: post,
-    }
+  const [picture, setPicture] = useState('')
 
-    // console.log(infoPost)
+  function onSubmitHandler(e) {
+    e.preventDefault()
+
+    const data = new FormData()
+    data.append('image', picture)
+    data.append('posterId', userId)
+    data.append('post', post)
 
     fetch('http://localhost:7000/api/post', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
         Authorization: 'Bearer ' + token,
       },
-      body: JSON.stringify(infoPost),
+      body: data,
     })
       .then((res) => res.json())
       .then((data) => {
         console.log(data)
-        setImageUrl('')
         setPost('')
         props.callApiPost(token)
       })
-      .catch(() => console.log({ message: 'Url GET Post non valide ' }))
+      .catch((err) => console.log({ message: err }))
   }
 
   // Syntaxe JSX --------------------------------------------------
   return (
-    <FormStyled onSubmit={submitForm}>
+    <FormStyled onSubmit={onSubmitHandler}>
       <label>
         <Input
-          type="text"
-          id="image"
-          placeholder="Entrez votre Url image"
-          value={imageUrl}
-          onChange={(e) => setImageUrl(e.target.value)}
+          type="file"
+          name="file"
+          accept=".jpg,.jpeg,.png"
+          onChange={(e) => setPicture(e.target.files[0])}
         />
       </label>
 
       <label>
         <Textarea
           type="text"
-          id="post"
+          name="post"
           maxLength={250}
           placeholder="Votre post"
           value={post}

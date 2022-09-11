@@ -73,7 +73,7 @@ export default function ModalPut(props) {
   const token = localStorage.getItem('token')
 
   const [post, setPost] = useState(props.post)
-  const [imageUrl, setImageUrl] = useState(props.imageUrl)
+  const [picture, setPicture] = useState('')
 
   const [modal, setModal] = useState(false)
 
@@ -84,18 +84,16 @@ export default function ModalPut(props) {
   function modifyPost(e) {
     e.preventDefault()
 
-    const newPost = {
-      post: post,
-      imageUrl: imageUrl,
-    }
+    const data = new FormData()
+    data.append('image', picture)
+    data.append('post', post)
 
     fetch('http://localhost:7000/api/post/' + props.postId, {
       method: 'PUT',
       headers: {
-        'Content-Type': 'application/json',
         Authorization: 'Bearer ' + token,
       },
-      body: JSON.stringify(newPost),
+      body: data,
     })
       .then((res) => {
         return res.json()
@@ -125,20 +123,19 @@ export default function ModalPut(props) {
               <H1>Modifier un post</H1>
 
               <Form onSubmit={modifyPost}>
-                <label htmlFor="image"></label>
+                <label></label>
                 <Input
-                  type="text"
-                  // type="file"
-                  id="image"
-                  placeholder="Entrez votre Url image"
-                  value={imageUrl}
-                  onChange={(e) => setImageUrl(e.target.value)}
+                  type="file"
+                  name="file"
+                  onChange={(e) => setPicture(e.target.files[0])}
                   required
                 />
 
                 <label htmlFor="post"></label>
                 <Textarea
-                  id="post"
+                  type="text"
+                  name="post"
+                  maxLength={250}
                   placeholder="Votre post"
                   value={post}
                   onChange={(e) => setPost(e.target.value)}
