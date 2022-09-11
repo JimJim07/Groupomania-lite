@@ -36,8 +36,8 @@ const Button = styled.button`
   }
 `
 
+// Composant --------------------------------------------------
 export default function FormHome(props) {
-  console.log(props)
   const userId = localStorage.getItem('userId')
   const token = localStorage.getItem('token')
 
@@ -52,7 +52,7 @@ export default function FormHome(props) {
       post: post,
     }
 
-    console.log(infoPost)
+    // console.log(infoPost)
 
     fetch('http://localhost:7000/api/post', {
       method: 'POST',
@@ -65,10 +65,16 @@ export default function FormHome(props) {
       .then((res) => res.json())
       .then((data) => {
         console.log(data)
+        setImageUrl('')
+        setPost('')
+        props.callApiPost(token)
       })
+      .catch(() => console.log({ message: 'Url GET Post non valide ' }))
   }
+
+  // Syntaxe JSX --------------------------------------------------
   return (
-    <FormStyled>
+    <FormStyled onSubmit={submitForm}>
       <label>
         <Input
           type="text"
@@ -90,7 +96,7 @@ export default function FormHome(props) {
           required
         ></Textarea>
       </label>
-      <Button onClick={submitForm}>Publier le post</Button>
+      <Button>Publier le post</Button>
     </FormStyled>
   )
 }

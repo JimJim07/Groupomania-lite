@@ -102,9 +102,13 @@ exports.getOnePost = (req, res) => {
 };
 
 exports.getAllPosts = (req, res) => {
+    // if (post.posterId != req.auth.userId) {
+    //     res.status(401).json({ message: 'Not authorized' });
+    // } else {
     PostModel.find()
         .then(posts => res.status(200).json(posts))
-        .catch(error => res.status(400).json({ error }));
+        .catch(error => res.status(400).json({ error }))
+    // };
 };
 
 exports.likePost = (req, res) => {

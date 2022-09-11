@@ -46,15 +46,14 @@ exports.login = (req, res) => {
 };
 
 exports.getOneUser = (req, res) => {
-    UserModel.findById(req.params.id, (err, docs) => {
-        if (!err) res.send(docs);
-        else console.log('ID unknown : ' + err);
-    }).select('-password')
-}
+    UserModel.findOne({ _id: req.params.id }).select('-password')
+        .then((user) => res.status(200).json(user))
+        .catch(error => res.status(400).json({ error }));
+};
 
 // A supprimer *****************************************************************************
 exports.getAllUsers = (req, res) => {
-    UserModel.find()
+    UserModel.find().select('-password')
         .then(users => res.status(200).json(users))
         .catch(error => res.status(400).json({ error }));
 };

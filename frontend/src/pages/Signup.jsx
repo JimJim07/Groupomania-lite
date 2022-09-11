@@ -6,6 +6,7 @@ import logo from '../assets/icon-color.png'
 
 // Styled-components --------------------------------------
 const HomeContainer = styled.div`
+  margin-top: 100px;
   text-align: center;
   color: ${colors.primary};
   display: flex;
@@ -80,6 +81,7 @@ const LinkStyled = styled(Link)`
   }
 `
 
+// Composant --------------------------------------------------
 export default function Signup() {
   const [pseudo, setPseudo] = useState('')
   const [email, setEmail] = useState('')
@@ -96,7 +98,6 @@ export default function Signup() {
       email: email,
       password: password,
     }
-    console.log(infoUser)
 
     // Appel APi pour l'inscription
     fetch('http://localhost:7000/api/user/signup', {
@@ -116,6 +117,7 @@ export default function Signup() {
           towardsLogin(infoUser)
         }
       })
+      .catch((err) => console.log(err))
   }
 
   function towardsLogin(infoUser) {
@@ -131,14 +133,16 @@ export default function Signup() {
         if (data.error) {
           console.log(data.error)
         } else {
-          console.log(data)
+          // console.log(data)
           localStorage.setItem('userId', data.userId)
           localStorage.setItem('token', data.token)
           navigate('/home')
         }
       })
+      .catch((err) => console.log(err))
   }
 
+  // Syntaxe JSX --------------------------------------------------
   return (
     <HomeContainer>
       <Container>

@@ -12,6 +12,7 @@ const HeaderStyled = styled.header`
   padding: 5px;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 70px;
 `
 const ImgStyled = styled.img`
   width: 80%;

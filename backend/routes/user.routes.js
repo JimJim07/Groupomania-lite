@@ -9,7 +9,7 @@ router.post('/login', userCtrl.login);
 router.get('/:id', auth, userCtrl.getOneUser);
 
 // A suprrimer *****************************
-router.get('/', auth, userCtrl.getAllUsers);
+router.get('/', userCtrl.getAllUsers);
 router.delete('/', userCtrl.deleteAllUsers);
 // A suprrimer *****************************
 

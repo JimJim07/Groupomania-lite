@@ -6,6 +6,7 @@ import logo from '../assets/icon-color.png'
 
 // Styled-components --------------------------------------
 const HomeContainer = styled.div`
+  margin-top: 100px;
   text-align: center;
   color: ${colors.primary};
   display: flex;
@@ -80,6 +81,7 @@ const LinkStyled = styled(Link)`
   }
 `
 
+// Composant --------------------------------------------------
 export default function Login() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -108,7 +110,6 @@ export default function Login() {
           console.log(data)
           setTxtError('Paire identifiant/mot de passe incorrecte')
         } else {
-          console.log(data)
           localStorage.setItem('userId', data.userId)
           localStorage.setItem('token', data.token)
           navigate('/home')
@@ -116,6 +117,7 @@ export default function Login() {
       })
   }
 
+  // Syntaxe JSX --------------------------------------------------
   return (
     <HomeContainer>
       <Container>
