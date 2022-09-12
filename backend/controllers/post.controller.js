@@ -4,21 +4,16 @@ const PostModel = require('../models/Post.model');
 const UserModel = require('../models/User.model');
 
 exports.createPost = (req, res, next) => {
-    const postObject = req.body.post;
-    delete postObject._id;
-
     const post = new PostModel({
-        posterId: req.body.posterId,
+        posterId: req.auth.userId,
         post: req.body.post,
         imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
         likers: [],
     });
-
     post.save()
         .then(() => { res.status(201).json({ message: 'Objet enregistré !' }) })
         .catch(error => { res.status(400).json({ error }) })
 };
-
 
 exports.modifyPost = (req, res) => {
     if (req.file) {
@@ -81,20 +76,10 @@ exports.deleteOnePost = (req, res) => {
         });
 };
 
-// exports.getOnePost = (req, res) => {
-//     PostModel.findOne({ _id: req.params.id })
-//         .then(post => res.status(200).json(post))
-//         .catch(error => res.status(404).json({ error }));
-// };
-
 exports.getAllPosts = (req, res) => {
-    // if (post.posterId != req.auth.userId) {
-    //     res.status(401).json({ message: 'Not authorized' });
-    // } else {
     PostModel.find()
         .then(posts => res.status(200).json(posts))
         .catch(error => res.status(400).json({ error }))
-    // };
 };
 
 exports.likePost = (req, res) => {

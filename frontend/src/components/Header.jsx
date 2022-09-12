@@ -1,6 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
-import colors from '../utils/style/colors'
+import colors from '../styles/colors'
 import logo from '../assets/icon-white.svg'
 
 // Styled-components -------------------------------------------------

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import styled from 'styled-components'
-import colors from '../utils/style/colors'
+import colors from '../styles/colors'
 import logo from '../assets/icon-color.png'
 
 // Styled-components --------------------------------------

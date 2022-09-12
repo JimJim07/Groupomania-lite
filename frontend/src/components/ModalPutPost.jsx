@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import colors from '../utils/style/colors'
+import colors from '../styles/colors'
 import iconUpdate from '../assets/update.png'
 import iconCancel from '../assets/annuler.png'
 
@@ -33,7 +33,7 @@ const IconCancel = styled.img`
   top: 10px;
   right: 10px;
 `
-// Stle Form
+// Style Form ---------------
 const H1 = styled.h1`
   text-align: center;
 `
@@ -69,11 +69,11 @@ const Button = styled.button`
 `
 // Composant ModalPut --------------------------------------------------
 export default function ModalPut(props) {
-  // console.log(props)
+  console.log(props)
   const token = localStorage.getItem('token')
 
   const [post, setPost] = useState(props.post)
-  const [picture, setPicture] = useState('')
+  const [picture, setPicture] = useState(props.imageUrl)
 
   const [modal, setModal] = useState(false)
 
@@ -127,6 +127,7 @@ export default function ModalPut(props) {
                 <Input
                   type="file"
                   name="file"
+                  accept=".jpg,.jpeg,.png,"
                   onChange={(e) => setPicture(e.target.files[0])}
                   required
                 />

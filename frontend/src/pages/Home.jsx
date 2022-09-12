@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { Loader } from '../utils/style/Atoms'
+import { Loader } from '../styles/Atoms'
 import Card from '../components/Card'
 import FormHome from '../components/FormHome'
 import styled from 'styled-components'
-import colors from '../utils/style/colors'
+import colors from '../styles/colors'
 
 // Styled-components --------------------------------------
 const LoaderWrapper = styled.div`
@@ -122,7 +122,7 @@ export default function Home() {
 
   // Syntaxe JSX --------------------------------------------------
   return (
-    <div>
+    <>
       {loadUser && loadPost ? (
         <LoaderWrapper>
           <Loader />
@@ -130,12 +130,11 @@ export default function Home() {
       ) : (
         <div>
           <DivTop>
-            <h1>Home</h1>
+            <h1>Accueil</h1>
             <LinkStyled to="/" onClick={deconnection}>
               Déconnection
             </LinkStyled>
             <h3>{dataUser.pseudo} </h3>
-            {/* <h3>{dataUser.email} </h3> */}
             {/* <h3>{dataUser._id} </h3> */}
           </DivTop>
           <FormHome callApiPost={callApiPost} />
@@ -154,6 +153,6 @@ export default function Home() {
           </ContainerCards>
         </div>
       )}
-    </div>
+    </>
   )
 }

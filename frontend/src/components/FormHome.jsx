@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import colors from '../utils/style/colors'
+import colors from '../styles/colors'
+// import iconPicture from '../assets/pictures.png'
 
 // Styled-components -------------------------------------------------
 const FormStyled = styled.form`
@@ -38,7 +39,6 @@ const Button = styled.button`
 
 // Composant --------------------------------------------------
 export default function FormHome(props) {
-  const userId = localStorage.getItem('userId')
   const token = localStorage.getItem('token')
 
   const [post, setPost] = useState('')
@@ -50,7 +50,6 @@ export default function FormHome(props) {
 
     const data = new FormData()
     data.append('image', picture)
-    data.append('posterId', userId)
     data.append('post', post)
 
     fetch('http://localhost:7000/api/post', {
@@ -76,8 +75,9 @@ export default function FormHome(props) {
         <Input
           type="file"
           name="file"
-          accept=".jpg,.jpeg,.png"
+          accept=".jpg,.jpeg,.png,"
           onChange={(e) => setPicture(e.target.files[0])}
+          required
         />
       </label>
 

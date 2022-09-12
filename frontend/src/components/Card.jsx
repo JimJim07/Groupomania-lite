@@ -12,41 +12,55 @@ const ContainerCard = styled.div`
   width: 95%;
   padding: 20px;
   margin: 10px auto;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
   min-height: 180px;
   text-align: left;
   display: flex;
   flex-wrap: wrap;
+  word-break: break-all;
+  @media (max-width: 630px) {
+    flex-direction: column;
+  }
 `
 
 const Img = styled.img`
   height: 100%;
-  width: 200px;
+  max-height: 180px;
+  width: 250px;
   object-fit: cover;
-  margin-right: 15px;
-`
-const IconDelete = styled.img`
-  cursor: pointer;
-`
-const ContainerBTN = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  // align-items: flex-end;
+  @media (max-width: 630px) {
+    width: 100%;
+  }
 `
 const DivMiddle = styled.div`
   display: flex;
   flex-direction: column;
   flex: 1;
   justify-content: space-between;
+  padding: 0 15px;
+  @media (max-width: 630px) {
+    padding: 15px 0 0 0;
+  }
 `
 const DivMiddle1 = styled.div`
   display: flex;
   align-items: center;
 `
+const ContainerBTN = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  @media (max-width: 630px) {
+    margin-top: 15px;
+    flex-direction: row;
+  }
+`
+const IconDelete = styled.img`
+  cursor: pointer;
+`
 const IconLike = styled.img`
   cursor: pointer;
-  margin-right: 5px;
+  margin: 10px 10px 0 0;
 `
 
 // Composant  --------------------------------------------------
@@ -122,7 +136,7 @@ export default function Card(props) {
     <ContainerCard>
       <Img src={props.imageUrl} alt="Images du Post" />
       <DivMiddle>
-        <p>Poster Id :{props.posterId}</p>
+        {/* <p>PosterId :{props.posterId}</p> */}
         <p>{props.post}</p>
         <DivMiddle1>
           {!liked ? (
