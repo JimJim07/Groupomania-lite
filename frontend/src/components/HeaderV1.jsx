@@ -1,5 +1,6 @@
 import { useContext } from 'react'
 import { InfoContext } from '../Context/InfoContext'
+import Cookies from 'js-cookie'
 import { Link, useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 import colors from '../styles/colors'
@@ -65,6 +66,7 @@ export default function Header() {
     console.log({ message: 'Déconnexion' })
     setConnexion(false)
     localStorage.clear()
+    Cookies.remove('token')
     navigate('/')
   }
 

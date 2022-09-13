@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import Cookies from 'js-cookie'
 import styled from 'styled-components'
 import colors from '../styles/colors'
 import iconUpdate from '../assets/update.png'
@@ -69,7 +70,7 @@ const Button = styled.button`
 `
 // Composant ModalPut --------------------------------------------------
 export default function ModalPut(props) {
-  const token = localStorage.getItem('token')
+  const token = Cookies.get('token')
 
   const [post, setPost] = useState(props.post)
   const [picture, setPicture] = useState(props.imageUrl)

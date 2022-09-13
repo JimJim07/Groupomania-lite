@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import Cookies from 'js-cookie'
 import styled from 'styled-components'
 import colors from '../styles/colors'
 // import iconPicture from '../assets/pictures.png'
@@ -39,7 +40,7 @@ const Button = styled.button`
 
 // Composant --------------------------------------------------
 export default function FormHome(props) {
-  const token = localStorage.getItem('token')
+  const token = Cookies.get('token')
 
   const [post, setPost] = useState('')
 

@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import Cookies from 'js-cookie'
 import { useNavigate, Link } from 'react-router-dom'
 import styled from 'styled-components'
 import colors from '../styles/colors'
@@ -134,7 +135,7 @@ export default function Signup() {
         } else {
           // console.log(data)
           localStorage.setItem('userId', data.userId)
-          localStorage.setItem('token', data.token)
+          Cookies.set('token', data.token, { expires: 1 })
           navigate('/home')
         }
       })
@@ -180,7 +181,7 @@ export default function Signup() {
           <Label>
             <Input
               type="password"
-              //   minLength={6}
+              minLength={3}
               placeholder="Mot de passe"
               value={password}
               onChange={(e) => {

@@ -1,42 +1,21 @@
 import React, { useEffect, useState, useContext } from 'react'
 import { InfoContext } from '../Context/InfoContext'
-import { Link, useNavigate } from 'react-router-dom'
+import Cookies from 'js-cookie'
+import { useNavigate } from 'react-router-dom'
 import { Loader } from '../styles/Atoms'
 import Card from '../components/Card'
 import FormHome from '../components/FormHome'
 import styled from 'styled-components'
-import colors from '../styles/colors'
 
 // Styled-components --------------------------------------
 const LoaderWrapper = styled.div`
   display: flex;
   justify-content: center;
 `
-const DivTop = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: end;
-  align-items: center;
-  height: 70px;
-  max-width: 800px;
-  width: 95%;
-  margin: auto;
-`
 const ContainerCards = styled.div`
   display: flex;
   justify-content: center;
   flex-direction: column-reverse;
-`
-const LinkStyled = styled(Link)`
-  text-decoration: none;
-  color: white;
-  padding: 8px;
-  border-radius: 10px;
-  margin: 0 10px;
-  background-color: ${colors.tertiary};
-  &:hover {
-    background: ${colors.primary};
-  }
 `
 
 // Composant --------------------------------------------------
@@ -44,9 +23,8 @@ export default function Home() {
   const { setInfoUser, setConnexion } = useContext(InfoContext)
 
   const userId = localStorage.getItem('userId')
-  const token = localStorage.getItem('token')
+  const token = Cookies.get('token')
 
-  const [dataUser, setDataUser] = useState({})
   const [dataPost, setDataPost] = useState([])
 
   const [loadUser, setLoadUser] = useState(true)
@@ -64,9 +42,10 @@ export default function Home() {
     callApiPost(token)
   }, [token])
 
+  // Renvois a la page Login si aucun UserId et Token n'est founi
   useEffect(() => {
-    if (!token) navigate('/')
-  }, [token, navigate])
+    if (!token || !userId) navigate('/')
+  }, [token, userId, navigate])
 
   function callApiUser(token, userId) {
     setLoadUser(true)
@@ -80,7 +59,6 @@ export default function Home() {
       .then((res) => res.json())
       .then((data) => {
         // console.log(data)
-        setDataUser(data)
         setInfoUser(data.pseudo)
         setConnexion(true)
         setLoadUser(false)

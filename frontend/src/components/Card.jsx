@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useEffect } from 'react'
+import Cookies from 'js-cookie'
 import styled from 'styled-components'
 import iconDelete from '../assets/delete.png'
 import iconLike from '../assets/love.png'
@@ -67,7 +68,7 @@ const IconLike = styled.img`
 export default function Card(props) {
   // console.log(props)
   const userId = localStorage.getItem('userId')
-  const token = localStorage.getItem('token')
+  const token = Cookies.get('token')
 
   const [nbLike, setNbLike] = useState(props.likers.length)
 

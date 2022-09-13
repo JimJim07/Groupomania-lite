@@ -17,7 +17,6 @@ exports.createPost = (req, res, next) => {
 
 exports.modifyPost = (req, res) => {
     if (req.file) {
-        console.log(req.body);
         PostModel.findOne({ _id: req.params.id })
             .then(post => {
                 if (post.posterId != req.auth.userId) {
