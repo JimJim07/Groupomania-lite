@@ -79,7 +79,7 @@ export default function Header() {
 
       {infoUser && connexion && (
         <DivUser>
-          <h3>Hello {infoUser}</h3>
+          <h3>😊Hello {infoUser}</h3>
           <LinkStyled to="/" onClick={deconnection}>
             Déconnection
           </LinkStyled>
