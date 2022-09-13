@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
+import { InfoContext } from '../Context/InfoContext'
 import { Link, useNavigate } from 'react-router-dom'
 import { Loader } from '../styles/Atoms'
 import Card from '../components/Card'
@@ -40,6 +41,8 @@ const LinkStyled = styled(Link)`
 
 // Composant --------------------------------------------------
 export default function Home() {
+  const { setInfoUser, setConnexion } = useContext(InfoContext)
+
   const userId = localStorage.getItem('userId')
   const token = localStorage.getItem('token')
 
@@ -48,9 +51,6 @@ export default function Home() {
 
   const [loadUser, setLoadUser] = useState(true)
   const [loadPost, setLoadPost] = useState(true)
-
-  const [errorUser, setErrorUser] = useState(false)
-  const [errorPost, setErrorPost] = useState(false)
 
   const navigate = useNavigate()
 
@@ -81,11 +81,12 @@ export default function Home() {
       .then((data) => {
         // console.log(data)
         setDataUser(data)
+        setInfoUser(data.pseudo)
+        setConnexion(true)
         setLoadUser(false)
       })
       .catch(() => {
         console.log({ message: 'Url GET User non valide' })
-        setErrorUser(true)
       })
   }
 
@@ -100,24 +101,13 @@ export default function Home() {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data)
+        // console.log(data)
         setDataPost(data)
         setLoadPost(false)
       })
       .catch(() => {
         console.log({ message: 'Url GET Post non valide ' })
-        setErrorPost(true)
       })
-  }
-
-  function deconnection() {
-    console.log({ message: 'Déconnection' })
-    localStorage.clear()
-    navigate('/')
-  }
-
-  if (errorUser || errorPost) {
-    return <span>Un problème est survenu</span>
   }
 
   // Syntaxe JSX --------------------------------------------------
@@ -129,14 +119,6 @@ export default function Home() {
         </LoaderWrapper>
       ) : (
         <div>
-          <DivTop>
-            <h1>Accueil</h1>
-            <LinkStyled to="/" onClick={deconnection}>
-              Déconnection
-            </LinkStyled>
-            <h3>{dataUser.pseudo} </h3>
-            {/* <h3>{dataUser._id} </h3> */}
-          </DivTop>
           <FormHome callApiPost={callApiPost} />
           <ContainerCards>
             {dataPost.map((item, index) => (

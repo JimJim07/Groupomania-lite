@@ -69,7 +69,6 @@ const Button = styled.button`
 `
 // Composant ModalPut --------------------------------------------------
 export default function ModalPut(props) {
-  console.log(props)
   const token = localStorage.getItem('token')
 
   const [post, setPost] = useState(props.post)
@@ -99,7 +98,7 @@ export default function ModalPut(props) {
         return res.json()
       })
       .then((data) => {
-        console.log(data)
+        // console.log(data)
         props.callApiPost(token)
         toggleModal()
       })

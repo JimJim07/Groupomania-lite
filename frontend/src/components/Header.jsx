@@ -16,6 +16,7 @@ const HeaderStyled = styled.header`
 `
 const ImgStyled = styled.img`
   width: 80%;
+  max-width: 500px;
   padding-left: 20px;
 `
 const Nav = styled.nav`

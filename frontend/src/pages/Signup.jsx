@@ -6,7 +6,6 @@ import logo from '../assets/icon-color.png'
 
 // Styled-components --------------------------------------
 const HomeContainer = styled.div`
-  margin-top: 100px;
   text-align: center;
   color: ${colors.primary};
   display: flex;
@@ -153,7 +152,7 @@ export default function Signup() {
               type="text"
               name="pseudo"
               minLength={3}
-              maxLength={50}
+              maxLength={30}
               placeholder="Pseudo"
               value={pseudo}
               onChange={(e) => {

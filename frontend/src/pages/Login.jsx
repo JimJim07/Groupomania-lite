@@ -6,7 +6,6 @@ import logo from '../assets/icon-color.png'
 
 // Styled-components --------------------------------------
 const HomeContainer = styled.div`
-  margin-top: 100px;
   text-align: center;
   color: ${colors.primary};
   display: flex;
