@@ -6,6 +6,7 @@ import iconDelete from '../assets/delete.png'
 import iconLike from '../assets/love.png'
 import iconUnlike from '../assets/unlove.png'
 import ModalPutPost from './ModalPutPost'
+import { dateParser } from '../utils/dateFormat'
 
 // styled-components -----------------------------------------
 const ContainerCard = styled.div`
@@ -153,7 +154,11 @@ export default function Card(props) {
     <ContainerCard>
       <Img src={props.imageUrl} alt="Images du Post" />
       <DivMiddle>
-        <h3>Pseudo : {pseudo}</h3>
+        <div>
+          <h5>{dateParser(props.createdAt)}</h5>
+          <h3>Pseudo : {pseudo}</h3>
+        </div>
+
         <p>{props.post}</p>
         <DivMiddle1>
           {!liked ? (

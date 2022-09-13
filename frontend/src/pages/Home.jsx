@@ -107,6 +107,7 @@ export default function Home() {
                 imageUrl={item.imageUrl}
                 post={item.post}
                 likers={item.likers}
+                createdAt={item.createdAt}
                 callApiPost={callApiPost}
               />
             ))}
