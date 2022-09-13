@@ -111,7 +111,9 @@ export default function Signup() {
       .then((data) => {
         if (data.error) {
           console.log(data.error)
-          setTxtError('Email déjà utilisé, Utilisateur non enregistré.')
+          setTxtError(
+            'Email incorrecte ou déjà utilisé, Utilisateur non enregistré.'
+          )
         } else {
           console.log(data)
           towardsLogin(infoUser)
@@ -135,7 +137,7 @@ export default function Signup() {
         } else {
           // console.log(data)
           localStorage.setItem('userId', data.userId)
-          Cookies.set('token', data.token, { expires: 1 })
+          Cookies.set('token', data.token, { expires: 1, secure: true })
           navigate('/home')
         }
       })

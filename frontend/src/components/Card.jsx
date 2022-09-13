@@ -70,6 +70,8 @@ export default function Card(props) {
   const userId = localStorage.getItem('userId')
   const token = Cookies.get('token')
 
+  const [pseudo, setPseudo] = useState('')
+
   const [nbLike, setNbLike] = useState(props.likers.length)
 
   const [liked, setLiked] = useState(false)
@@ -115,7 +117,7 @@ export default function Card(props) {
   }, [props.likers, userId])
 
   function deletePost(postId, token) {
-    fetch('http://localhost:7000/api/post/' + postId, {
+    fetch(`http://localhost:7000/api/post/${postId}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
@@ -132,12 +134,26 @@ export default function Card(props) {
       .catch((error) => console.log(error))
   }
 
+  useEffect(() => {
+    fetch(`http://localhost:7000/api/user/${props.posterId}`, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        // console.log(data)
+        setPseudo(data.pseudo)
+      })
+  }, [props.posterId, token])
+
   // Syntaxe JSX --------------------------------------------------
   return (
     <ContainerCard>
       <Img src={props.imageUrl} alt="Images du Post" />
       <DivMiddle>
-        {/* <p>PosterId :{props.posterId}</p> */}
+        <h3>Pseudo : {pseudo}</h3>
         <p>{props.post}</p>
         <DivMiddle1>
           {!liked ? (

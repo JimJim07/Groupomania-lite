@@ -46,7 +46,7 @@ exports.login = (req, res) => {
 };
 
 exports.getOneUser = (req, res) => {
-    UserModel.findOne({ _id: req.params.id }).select('-password')
+    UserModel.findOne({ _id: req.params.id }).select('pseudo')
         .then((user) => res.status(200).json(user))
         .catch(error => res.status(400).json({ error }));
 };

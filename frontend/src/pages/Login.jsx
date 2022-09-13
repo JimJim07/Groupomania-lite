@@ -108,10 +108,11 @@ export default function Login() {
       .then((data) => {
         if (data.message) {
           console.log(data)
-          setTxtError('Paire identifiant/mot de passe incorrecte')
+          setTxtError('Paire identifiant / mot de passe incorrecte')
         } else {
+          console.log({ message: 'Connexion réussie' })
           localStorage.setItem('userId', data.userId)
-          Cookies.set('token', data.token, { expires: 1 })
+          Cookies.set('token', data.token, { expires: 1, secure: true })
           navigate('/home')
         }
       })
