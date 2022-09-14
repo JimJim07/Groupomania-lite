@@ -136,7 +136,8 @@ export default function Signup() {
           console.log(data.error)
         } else {
           // console.log(data)
-          localStorage.setItem('userId', data.userId)
+          if (data.adminId) localStorage.setItem('adminId', data.adminId)
+          if (data.userId) localStorage.setItem('userId', data.userId)
           Cookies.set('token', data.token, { expires: 1, secure: true })
           navigate('/home')
         }
@@ -154,7 +155,7 @@ export default function Signup() {
             <Input
               type="text"
               name="pseudo"
-              minLength={3}
+              minLength={5}
               maxLength={30}
               placeholder="Pseudo"
               value={pseudo}
@@ -183,7 +184,7 @@ export default function Signup() {
           <Label>
             <Input
               type="password"
-              minLength={3}
+              minLength={5}
               placeholder="Mot de passe"
               value={password}
               onChange={(e) => {

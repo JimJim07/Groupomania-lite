@@ -5,9 +5,9 @@ const UserModel = require('../models/User.model');
 const AdminModel = require('../models/Admin.model');
 
 const Admin = {
-    pseudo: "Admin007",
+    pseudo: "Admin",
     email: "admin@test.fr",
-    password: "Admin1234"
+    password: "Adm123"
 }
 
 exports.signup = (req, res) => {
@@ -102,16 +102,10 @@ exports.getOneUser = (req, res) => {
         .catch(error => res.status(400).json({ error }));
 };
 
-// A supprimer *****************************************************************************
-exports.getAllUsers = (req, res) => {
-    UserModel.find().select('-password')
-        .then(users => res.status(200).json(users))
-        .catch(error => res.status(400).json({ error }));
-};
-
-exports.deleteAllUsers = (req, res) => {
-    UserModel.deleteMany()
-        .then(() => res.status(200).json({ message: 'Tous les utilisateurs supprimés !' }))
-        .catch(error => res.status(400).json({ error }));
-};
-// A supprimer *****************************************************************************
+exports.getOneAdmin = (req, res) => {
+    if (req.params.id == req.auth.adminId) {
+        AdminModel.findOne({ _id: req.params.id }).select('pseudo')
+            .then((admin) => res.status(200).json(admin))
+            .catch(error => res.status(400).json({ error }));
+    }
+}

@@ -69,9 +69,10 @@ const IconLike = styled.img`
 export default function Card(props) {
   // console.log(props)
   const userId = localStorage.getItem('userId')
+  const adminId = localStorage.getItem('adminId')
   const token = Cookies.get('token')
 
-  const [pseudo, setPseudo] = useState('')
+  const [pseudo, setPseudo] = useState('Admin')
 
   const [nbLike, setNbLike] = useState(props.likers.length)
 
@@ -144,9 +145,9 @@ export default function Card(props) {
     })
       .then((res) => res.json())
       .then((data) => {
-        // console.log(data)
         setPseudo(data.pseudo)
       })
+      .catch((err) => console.log(err))
   }, [props.posterId, token])
 
   // Syntaxe JSX --------------------------------------------------
@@ -156,7 +157,7 @@ export default function Card(props) {
       <DivMiddle>
         <div>
           <h5>{dateParser(props.createdAt)}</h5>
-          <h3>Pseudo : {pseudo}</h3>
+          <h3>{pseudo}</h3>
         </div>
 
         <p>{props.post}</p>
@@ -182,6 +183,28 @@ export default function Card(props) {
           <p>{nbLike}</p>
         </DivMiddle1>
       </DivMiddle>
+
+      {adminId && (
+        <ContainerBTN>
+          <ModalPutPost
+            post={props.post}
+            imageUrl={props.imageUrl}
+            postId={props.postId}
+            callApiPost={props.callApiPost}
+          />
+          <IconDelete
+            src={iconDelete}
+            alt="img delete"
+            height={35}
+            width={35}
+            onClick={() => {
+              if (window.confirm('La suppression de ce post sera définitive')) {
+                deletePost(props.postId, token)
+              }
+            }}
+          />
+        </ContainerBTN>
+      )}
 
       {props.posterId === userId && (
         <ContainerBTN>

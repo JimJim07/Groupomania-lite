@@ -2,11 +2,10 @@
 const fs = require('fs');
 const PostModel = require('../models/Post.model');
 const UserModel = require('../models/User.model');
-const AdminModel = require('../models/Admin.model');
 
 exports.createPost = (req, res, next) => {
     const post = new PostModel({
-        posterId: req.auth.userId,
+        posterId: req.auth.userId || req.auth.adminId,
         post: req.body.post,
         imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
         likers: [],
@@ -138,11 +137,3 @@ exports.unlikePost = (req, res) => {
         return res.status(400).send(err);
     }
 };
-
-// A supprimer *********************************************************************
-exports.deleteAllPosts = (req, res) => {
-    PostModel.deleteMany()
-        .then(() => res.status(200).json({ message: 'Tous les posts supprimés !' }))
-        .catch(error => res.status(400).json({ error }));
-};
-// A supprimer *********************************************************************

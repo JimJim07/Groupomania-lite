@@ -20,9 +20,10 @@ const ContainerCards = styled.div`
 
 // Composant --------------------------------------------------
 export default function Home() {
-  const { setInfoUser, setConnexion } = useContext(InfoContext)
+  const { setInfoUser, setConnexion, setIfAdmin } = useContext(InfoContext)
 
   const userId = localStorage.getItem('userId')
+  const adminId = localStorage.getItem('adminId')
   const token = Cookies.get('token')
 
   const [dataPost, setDataPost] = useState([])
@@ -33,23 +34,24 @@ export default function Home() {
   const navigate = useNavigate()
 
   useEffect(() => {
+    if (userId && token) callApiUser(token, userId)
+    if (adminId && token) callApiAdmin(token, adminId)
     if (!token) return
-    callApiUser(token, userId)
-  }, [token, userId])
+  }, [token, userId, adminId])
 
   useEffect(() => {
     if (!token) return
     callApiPost(token)
   }, [token])
 
-  // Renvois a la page Login si aucun UserId et Token n'est founi
+  // Renvois a la page Login si aucun UserId ou adminId et Token n'est founi
   useEffect(() => {
-    if (!token || !userId) navigate('/')
-  }, [token, userId, navigate])
+    if ((!userId || !adminId) && !token) navigate('/')
+  }, [token, userId, adminId, navigate])
 
-  function callApiUser(token, userId) {
+  function callApiUser(token, UserId) {
     setLoadUser(true)
-    fetch(`http://localhost:7000/api/user/${userId}`, {
+    fetch(`http://localhost:7000/api/user/${UserId}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -58,10 +60,32 @@ export default function Home() {
     })
       .then((res) => res.json())
       .then((data) => {
-        // console.log(data)
+        console.log(data)
         setInfoUser(data.pseudo)
         setConnexion(true)
         setLoadUser(false)
+      })
+      .catch(() => {
+        console.log({ message: 'Url GET User non valide' })
+      })
+  }
+
+  function callApiAdmin(token, adminId) {
+    setLoadUser(true)
+    fetch(`http://localhost:7000/api/user/admin/${adminId}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data)
+        setInfoUser(data.pseudo)
+        setConnexion(true)
+        setLoadUser(false)
+        setIfAdmin(true)
       })
       .catch(() => {
         console.log({ message: 'Url GET User non valide' })

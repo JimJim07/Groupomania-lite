@@ -111,7 +111,9 @@ export default function Login() {
           setTxtError('Paire identifiant / mot de passe incorrecte')
         } else {
           console.log({ message: 'Connexion réussie' })
-          localStorage.setItem('userId', data.userId)
+          console.log(data)
+          if (data.adminId) localStorage.setItem('adminId', data.adminId)
+          if (data.userId) localStorage.setItem('userId', data.userId)
           Cookies.set('token', data.token, { expires: 1, secure: true })
           navigate('/home')
         }
@@ -141,7 +143,7 @@ export default function Login() {
           <Label>
             <Input
               type="password"
-              minLength={3}
+              minLength={5}
               placeholder="Mot de passe"
               value={password}
               onChange={(e) => {

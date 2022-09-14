@@ -1,3 +1,6 @@
+import { useContext } from 'react'
+import { InfoContext } from '../Context/InfoContext'
+import Cookies from 'js-cookie'
 import { Link, useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 import colors from '../styles/colors'
@@ -11,17 +14,34 @@ const HeaderStyled = styled.header`
   flex-wrap: wrap;
   padding: 5px;
   justify-content: space-between;
+  word-break: break-all;
   align-items: center;
-  margin-bottom: 70px;
+  margin-bottom: 50px;
 `
 const ImgStyled = styled.img`
   width: 80%;
-  max-width: 500px;
+  max-width: 450px;
   padding-left: 20px;
+  @media (max-width: 630px) {
+    padding: 10px;
+    width: 100%;
+  }
 `
-const Nav = styled.nav`
+const DivUser = styled.div`
+  min-width: 150px;
+  max-width: 300px;
+  height: 80px;
+  text-align: center;
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
+  justify-content: space-between;
+  @media (max-width: 630px) {
+    align-items: center;
+    max-width: 100%;
+    width: 100%;
+    flex-direction: row;
+    padding: 0 10px;
+  }
 `
 const LinkStyled = styled(Link)`
   text-decoration: none;
@@ -34,41 +54,20 @@ const LinkStyled = styled(Link)`
     background: ${colors.primary};
   }
 `
-const LinkStyledRed = styled(Link)`
-  text-decoration: none;
-  color: white;
-  padding: 8px;
-  border-radius: 10px;
-  margin: 0 10px;
-  background-color: ${colors.primary};
-  &:hover {
-    background: ${colors.tertiary};
-  }
-`
 
 // Composant --------------------------------------------------
 export default function Header() {
+  const { infoUser, connexion, setConnexion, setIfAdmin } =
+    useContext(InfoContext)
+
   const navigate = useNavigate()
 
-  function deleteAllUsers() {
-    fetch('http://localhost:7000/api/user/', {
-      method: 'DELETE',
-    })
-      .then((res) => res.json())
-      .then((data) => console.log(data))
-  }
-
-  function deleteAllPost() {
-    fetch('http://localhost:7000/api/post/', {
-      method: 'DELETE',
-    })
-      .then((res) => res.json())
-      .then((data) => console.log(data))
-  }
-
   function deconnection() {
-    console.log({ message: 'Déconnection' })
+    console.log({ message: 'Déconnexion' })
+    setConnexion(false)
+    setIfAdmin(false)
     localStorage.clear()
+    Cookies.remove('token')
     navigate('/')
   }
 
@@ -78,20 +77,15 @@ export default function Header() {
       <Link to="/">
         <ImgStyled src={logo} alt="Logo Groupomania" />
       </Link>
-      <Nav>
-        <LinkStyled to="/">Connexion</LinkStyled>
-        <LinkStyled to="/signup">Inscription</LinkStyled>
-        <LinkStyled to="/home">Home</LinkStyled>
-        <LinkStyledRed to="/" onClick={deleteAllUsers}>
-          Delete all users
-        </LinkStyledRed>
-        <LinkStyledRed to="/" onClick={deleteAllPost}>
-          Delete all posts
-        </LinkStyledRed>
-        <LinkStyled to="/" onClick={deconnection}>
-          Déconnection
-        </LinkStyled>
-      </Nav>
+
+      {infoUser && connexion && (
+        <DivUser>
+          <h3>😊Hello {infoUser}</h3>
+          <LinkStyled to="/" onClick={deconnection}>
+            Déconnection
+          </LinkStyled>
+        </DivUser>
+      )}
     </HeaderStyled>
   )
 }

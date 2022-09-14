@@ -13,9 +13,4 @@ router.delete('/:id', auth, postCtrl.deleteOnePost);
 router.patch('/like/:id', postCtrl.likePost);
 router.patch('/unlike/:id', postCtrl.unlikePost);
 
-// A supprimer ************************************
-router.delete('/', postCtrl.deleteAllPosts);
-// A supprimer ************************************
-
-
 module.exports = router;
