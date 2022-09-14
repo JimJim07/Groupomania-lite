@@ -8,9 +8,12 @@ _____________________________
 
 ### Backend config :
 
+* Ouvrez un premier terminal
+
 * Installez les dépendances : `cd backend` + `npm install`
 
 * Créez le fichier `.env` dans `backend/config/` avec les données suivantes
+
    - PORT=7000 `port localhost`
 
    - CLIENT_URL='http://localhost:3000' `URL client`
@@ -23,6 +26,8 @@ _____________________________
 ______________________________
   
 ### Frontend config : 
+
+* Ouvrez un deuxième terminal
 
 * Installez les dépendances : `cd frontend` + `npm install`
 

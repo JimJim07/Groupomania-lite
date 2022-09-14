@@ -2,6 +2,7 @@
 const fs = require('fs');
 const PostModel = require('../models/Post.model');
 const UserModel = require('../models/User.model');
+const AdminModel = require('../models/Admin.model');
 
 exports.createPost = (req, res, next) => {
     const post = new PostModel({
@@ -16,12 +17,11 @@ exports.createPost = (req, res, next) => {
 };
 
 exports.modifyPost = (req, res) => {
+
     if (req.file) {
         PostModel.findOne({ _id: req.params.id })
             .then(post => {
-                if (post.posterId != req.auth.userId) {
-                    res.status(401).json({ message: 'Not authorized' });
-                } else {
+                if (req.auth.adminId || post.posterId === req.auth.userId) {
                     // Supprime l'ancienne image
                     const filename = post.imageUrl.split('/images/')[1];
                     fs.unlink(`images/${filename}`, () => {
@@ -33,6 +33,8 @@ exports.modifyPost = (req, res) => {
                             .then(() => res.status(200).json({ message: 'Post modifiée!' }))
                             .catch(error => res.status(400).json({ error }));
                     })
+                } else {
+                    res.status(401).json({ message: 'Not authorized' });
                 }
 
             })
@@ -41,12 +43,12 @@ exports.modifyPost = (req, res) => {
         const postObject = { ...req.body };
         PostModel.findOne({ _id: req.params.id })
             .then(post => {
-                if (post.posterId != req.auth.userId) {
-                    res.status(401).json({ message: 'Not authorized' });
-                } else {
+                if (req.auth.adminId || post.posterId === req.auth.userId) {
                     PostModel.updateOne({ _id: req.params.id }, { ...postObject, _id: req.params.id })
                         .then(() => res.status(200).json({ message: 'Post modifiée!' }))
                         .catch(error => res.status(401).json({ error }));
+                } else {
+                    res.status(401).json({ message: 'Not authorized' });
                 }
             })
             .catch((error) => {
@@ -58,9 +60,7 @@ exports.modifyPost = (req, res) => {
 exports.deleteOnePost = (req, res) => {
     PostModel.findOne({ _id: req.params.id })
         .then(post => {
-            if (post.posterId != req.auth.userId) {
-                res.status(401).json({ message: 'Non autoriser' });
-            } else {
+            if (req.auth.adminId || post.posterId === req.auth.userId) {
                 // Supprime l'image
                 const filename = post.imageUrl.split('/images/')[1];
                 fs.unlink(`images/${filename}`, () => {
@@ -68,6 +68,8 @@ exports.deleteOnePost = (req, res) => {
                         .then(() => { res.status(200).json({ message: 'Post supprimée !' }) })
                         .catch(error => res.status(401).json({ error }));
                 });
+            } else {
+                res.status(401).json({ message: 'Non autoriser' });
             }
         })
         .catch(error => {
