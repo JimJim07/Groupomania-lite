@@ -18,7 +18,7 @@ _____________________________
 
    - CLIENT_URL='http://localhost:3000' `URL client`
 
-   - DB_USER_PASS='mongodb+srv://`Votre identifiant`:`Votre password`@cluster0.sdyji.mongodb.net/groupomania?retryWrites=true&w=majority'
+   - DB_USER_PASS='mongodb+srv://`Votre identifiant`:`Votre password`@cluster0.sdyji.mongodb.net/groupomania-lite?retryWrites=true&w=majority'
    
    - TOKEN_SECRET='d7yniy2yt9hpili17hk3o4b6rf4462z9ca90gu5239668k9dum' `votre clé secrète aléatoire`
 
