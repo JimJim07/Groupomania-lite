@@ -99,11 +99,8 @@ export default function ModalPut(props) {
       },
       body: data,
     })
-      .then((res) => {
-        return res.json()
-      })
-      .then((data) => {
-        // console.log(data)
+      .then((res) => res.json())
+      .then(() => {
         props.callApiPost(token)
         toggleModal()
       })
@@ -121,16 +118,16 @@ export default function ModalPut(props) {
               <H1>Modifier un post</H1>
 
               <Form onSubmit={modifyPost}>
-                <label></label>
-                <Input
-                  type="file"
-                  name="file"
-                  accept=".jpg,.jpeg,.png,"
-                  onChange={(e) => setPicture(e.target.files[0])}
-                  required
-                />
+                <label>
+                  <Input
+                    type="file"
+                    name="file"
+                    accept=".jpg,.jpeg,.png,"
+                    onChange={(e) => setPicture(e.target.files[0])}
+                    required
+                  />
+                </label>
 
-                <label htmlFor="post"></label>
                 <Textarea
                   type="text"
                   name="post"

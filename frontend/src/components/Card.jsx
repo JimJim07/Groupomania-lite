@@ -20,7 +20,7 @@ const ContainerCard = styled.div`
   text-align: left;
   display: flex;
   flex-wrap: wrap;
-  word-break: break-all;
+  overflow-wrap: break-word;
   @media (max-width: 630px) {
     flex-direction: column;
   }
@@ -44,6 +44,10 @@ const DivMiddle = styled.div`
   @media (max-width: 630px) {
     padding: 15px 0 0 0;
   }
+`
+const Psmall = styled.p`
+  font-size: 0.8em;
+  font-weight: 600;
 `
 const DivMiddle1 = styled.div`
   display: flex;
@@ -72,7 +76,7 @@ export default function Card(props) {
   const userId = localStorage.getItem('userId')
   const token = Cookies.get('token')
 
-  const [pseudo, setPseudo] = useState('Admin')
+  const [pseudo, setPseudo] = useState('')
   const [nbLike, setNbLike] = useState(props.likers.length)
   const [liked, setLiked] = useState(false)
 
@@ -158,33 +162,36 @@ export default function Card(props) {
       <Img src={props.imageUrl} alt="Images du Post" />
       <DivMiddle>
         <div>
-          <h5>{dateParser(props.createdAt)}</h5>
+          <Psmall>{dateParser(props.createdAt)}</Psmall>
           <h3>{pseudo}</h3>
         </div>
 
         <p>{props.post}</p>
+        {adminId ? (
+          <DivMiddle1></DivMiddle1>
+        ) : (
+          <DivMiddle1>
+            {!liked ? (
+              <IconLike
+                onClick={() => like(userId, props.postId)}
+                src={iconUnlike}
+                alt="unlike"
+                height={30}
+                width={30}
+              />
+            ) : (
+              <IconLike
+                onClick={() => unlike(userId, props.postId)}
+                src={iconLike}
+                alt="like"
+                height={30}
+                width={30}
+              />
+            )}
 
-        <DivMiddle1>
-          {!liked ? (
-            <IconLike
-              onClick={() => like(userId, props.postId)}
-              src={iconUnlike}
-              alt="unlike"
-              height={30}
-              width={30}
-            />
-          ) : (
-            <IconLike
-              onClick={() => unlike(userId, props.postId)}
-              src={iconLike}
-              alt="like"
-              height={30}
-              width={30}
-            />
-          )}
-
-          <p>{nbLike}</p>
-        </DivMiddle1>
+            <p>{nbLike}</p>
+          </DivMiddle1>
+        )}
       </DivMiddle>
 
       {adminId && (

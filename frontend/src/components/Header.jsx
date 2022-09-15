@@ -57,28 +57,25 @@ const LinkStyled = styled(Link)`
 
 // Composant --------------------------------------------------
 export default function Header() {
-  const { infoUser, connexion, setConnexion } = useContext(InfoContext)
-
+  const { pseudoCtx } = useContext(InfoContext)
+  const token = Cookies.get('token')
   const navigate = useNavigate()
 
   function deconnection() {
-    console.log({ message: 'Déconnexion' })
-    setConnexion(false)
-    localStorage.clear()
     Cookies.remove('token')
+    localStorage.clear()
     navigate('/')
+    console.log({ message: 'Déconnexion' })
   }
 
   // Syntaxe JSX --------------------------------------------------
   return (
     <HeaderStyled>
-      <Link to="/">
-        <ImgStyled src={logo} alt="Logo Groupomania" />
-      </Link>
+      <ImgStyled src={logo} alt="Logo Groupomania" width={450} height={69} />
 
-      {infoUser && connexion && (
+      {token && (
         <DivUser>
-          <h3>😊Hello {infoUser}</h3>
+          <h3>😊Hello {pseudoCtx}</h3>
           <LinkStyled to="/" onClick={deconnection}>
             Déconnection
           </LinkStyled>

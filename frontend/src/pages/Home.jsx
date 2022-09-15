@@ -29,7 +29,7 @@ const ContainerCards = styled.div`
 
 // Composant --------------------------------------------------
 export default function Home() {
-  const { setInfoUser, setConnexion } = useContext(InfoContext)
+  const { setPseudoCtx } = useContext(InfoContext)
 
   const userId = localStorage.getItem('userId')
   const adminId = localStorage.getItem('adminId')
@@ -69,8 +69,7 @@ export default function Home() {
     })
       .then((res) => res.json())
       .then((data) => {
-        setInfoUser(data.pseudo)
-        setConnexion(true)
+        setPseudoCtx(data.pseudo)
         setLoadUser(false)
       })
       .catch(() => {
@@ -89,8 +88,7 @@ export default function Home() {
     })
       .then((res) => res.json())
       .then((data) => {
-        setInfoUser(data.pseudo)
-        setConnexion(true)
+        setPseudoCtx(data.pseudo)
         setLoadUser(false)
       })
       .catch(() => {
@@ -127,8 +125,8 @@ export default function Home() {
           <Loader />
         </LoaderWrapper>
       ) : (
-        <div>
-          {!adminId && <FormHome callApiPost={callApiPost} />}
+        <>
+          {adminId ? <></> : <FormHome callApiPost={callApiPost} />}
           <ContainerCards>
             {dataPost.map((item, index) => (
               <Card
@@ -143,7 +141,7 @@ export default function Home() {
               />
             ))}
           </ContainerCards>
-        </div>
+        </>
       )}
     </>
   )

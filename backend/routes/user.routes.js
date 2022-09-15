@@ -3,7 +3,6 @@ const userCtrl = require('../controllers/user.controller');
 const auth = require('../middleware/auth')
 
 // http://localhost:7000/api/user/
-
 router.post('/signup', userCtrl.signup);
 router.post('/login', userCtrl.login);
 // User
