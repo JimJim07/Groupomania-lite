@@ -10,7 +10,7 @@ router.get('/', auth, postCtrl.getAllPosts);
 router.delete('/:id', auth, postCtrl.deleteOnePost);
 
 // Like Unlike
-router.patch('/like/:id', postCtrl.likePost);
-router.patch('/unlike/:id', postCtrl.unlikePost);
+router.patch('/like/:id', auth, postCtrl.likePost);
+router.patch('/unlike/:id', auth, postCtrl.unlikePost);
 
 module.exports = router;

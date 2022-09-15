@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import Cookies from 'js-cookie'
 import { Link, useNavigate } from 'react-router-dom'
+import Cookies from 'js-cookie'
 import styled from 'styled-components'
 import colors from '../styles/colors'
 import logo from '../assets/icon-color.png'
@@ -18,7 +18,7 @@ const Img = styled.img`
   width: 90%;
 `
 const Container = styled.div`
-  background-color: ${colors.backgroundLight};
+  background-color: ${colors.light};
   width: 90%;
   max-width: 500px;
   padding: 40px;
@@ -111,7 +111,6 @@ export default function Login() {
           setTxtError('Paire identifiant / mot de passe incorrecte')
         } else {
           console.log({ message: 'Connexion réussie' })
-          console.log(data)
           if (data.adminId) localStorage.setItem('adminId', data.adminId)
           if (data.userId) localStorage.setItem('userId', data.userId)
           Cookies.set('token', data.token, { expires: 1, secure: true })

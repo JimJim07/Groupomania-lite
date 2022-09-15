@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import Cookies from 'js-cookie'
 import { useNavigate, Link } from 'react-router-dom'
+import Cookies from 'js-cookie'
 import styled from 'styled-components'
 import colors from '../styles/colors'
 import logo from '../assets/icon-color.png'
@@ -18,7 +18,7 @@ const Img = styled.img`
   width: 90%;
 `
 const Container = styled.div`
-  background-color: ${colors.backgroundLight};
+  background-color: ${colors.light};
   width: 90%;
   max-width: 500px;
   padding: 40px;
@@ -135,7 +135,6 @@ export default function Signup() {
         if (data.error) {
           console.log(data.error)
         } else {
-          // console.log(data)
           if (data.adminId) localStorage.setItem('adminId', data.adminId)
           if (data.userId) localStorage.setItem('userId', data.userId)
           Cookies.set('token', data.token, { expires: 1, secure: true })

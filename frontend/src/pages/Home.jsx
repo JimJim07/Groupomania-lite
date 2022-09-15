@@ -1,16 +1,25 @@
 import React, { useEffect, useState, useContext } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { InfoContext } from '../Context/InfoContext'
 import Cookies from 'js-cookie'
-import { useNavigate } from 'react-router-dom'
-import { Loader } from '../styles/Atoms'
 import Card from '../components/Card'
 import FormHome from '../components/FormHome'
+import { Loader } from '../styles/Atoms'
 import styled from 'styled-components'
+import logo from '../assets/icon-color.png'
 
 // Styled-components --------------------------------------
 const LoaderWrapper = styled.div`
   display: flex;
   justify-content: center;
+`
+const Img = styled.img`
+  position: absolute;
+  width: 80%;
+  top: 60%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: -1;
 `
 const ContainerCards = styled.div`
   display: flex;
@@ -20,7 +29,7 @@ const ContainerCards = styled.div`
 
 // Composant --------------------------------------------------
 export default function Home() {
-  const { setInfoUser, setConnexion, setIfAdmin } = useContext(InfoContext)
+  const { setInfoUser, setConnexion } = useContext(InfoContext)
 
   const userId = localStorage.getItem('userId')
   const adminId = localStorage.getItem('adminId')
@@ -46,7 +55,7 @@ export default function Home() {
 
   // Renvois a la page Login si aucun UserId ou adminId et Token n'est founi
   useEffect(() => {
-    if ((!userId || !adminId) && !token) navigate('/')
+    if ((!userId || !token) && (!adminId || !token)) navigate('/')
   }, [token, userId, adminId, navigate])
 
   function callApiUser(token, UserId) {
@@ -60,7 +69,6 @@ export default function Home() {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data)
         setInfoUser(data.pseudo)
         setConnexion(true)
         setLoadUser(false)
@@ -81,11 +89,9 @@ export default function Home() {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data)
         setInfoUser(data.pseudo)
         setConnexion(true)
         setLoadUser(false)
-        setIfAdmin(true)
       })
       .catch(() => {
         console.log({ message: 'Url GET User non valide' })
@@ -115,13 +121,14 @@ export default function Home() {
   // Syntaxe JSX --------------------------------------------------
   return (
     <>
+      <Img src={logo} alt="Logo groupomania" />
       {loadUser && loadPost ? (
         <LoaderWrapper>
           <Loader />
         </LoaderWrapper>
       ) : (
         <div>
-          <FormHome callApiPost={callApiPost} />
+          {!adminId && <FormHome callApiPost={callApiPost} />}
           <ContainerCards>
             {dataPost.map((item, index) => (
               <Card

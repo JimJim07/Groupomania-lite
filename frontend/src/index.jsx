@@ -5,7 +5,6 @@ import Header from './components/Header'
 import Signup from './pages/Signup'
 import Login from './pages/Login'
 import Home from './pages/Home'
-import ErrorPage from './pages/Error/Error'
 import InfoContextProvider from './Context/InfoContext'
 import './index.css'
 
@@ -18,7 +17,7 @@ root.render(
         <Route path="/signup" element={<Signup />} />
         <Route path="/" element={<Login />} />
         <Route path="/home" element={<Home />} />
-        <Route path="*" element={<ErrorPage />} />
+        <Route path="*" element={<Login />} />
       </Routes>
     </InfoContextProvider>
   </BrowserRouter>

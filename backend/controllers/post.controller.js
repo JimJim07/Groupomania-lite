@@ -5,7 +5,7 @@ const UserModel = require('../models/User.model');
 
 exports.createPost = (req, res, next) => {
     const post = new PostModel({
-        posterId: req.auth.userId || req.auth.adminId,
+        posterId: req.auth.userId,
         post: req.body.post,
         imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
         likers: [],

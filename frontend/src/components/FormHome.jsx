@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import Cookies from 'js-cookie'
 import styled from 'styled-components'
 import colors from '../styles/colors'
-// import iconPicture from '../assets/pictures.png'
 
 // Styled-components -------------------------------------------------
 const FormStyled = styled.form`
@@ -15,8 +14,7 @@ const FormStyled = styled.form`
 const Input = styled.input`
   font-size: 18px;
   width: 100%;
-  padding: 8px;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
 `
 const Textarea = styled.textarea`
   font-size: 18px;
@@ -34,7 +32,7 @@ const Button = styled.button`
   border-radius: 3px;
   cursor: pointer;
   &:hover {
-    background: ${colors.backgroundLight};
+    background: ${colors.light};
   }
 `
 
@@ -43,7 +41,6 @@ export default function FormHome(props) {
   const token = Cookies.get('token')
 
   const [post, setPost] = useState('')
-
   const [picture, setPicture] = useState('')
 
   function onSubmitHandler(e) {

@@ -19,7 +19,7 @@ const ModalStyled = styled.div`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: #f1f1f1;
+  background: ${colors.white};
   padding: 14px 10px;
   border-radius: 10px;
   width: 90%;
@@ -27,12 +27,16 @@ const ModalStyled = styled.div`
 `
 const IconUpdate = styled.img`
   cursor: pointer;
+  height: 35px;
+  width: 35px;
 `
 const IconCancel = styled.img`
   cursor: pointer;
   position: absolute;
   top: 10px;
   right: 10px;
+  height: 35px;
+  width: 35px;
 `
 // Style Form ---------------
 const H1 = styled.h1`
@@ -65,7 +69,7 @@ const Button = styled.button`
   border-radius: 3px;
   cursor: pointer;
   &:hover {
-    background: ${colors.backgroundLight};
+    background: ${colors.light};
   }
 `
 // Composant ModalPut --------------------------------------------------
@@ -73,7 +77,7 @@ export default function ModalPut(props) {
   const token = Cookies.get('token')
 
   const [post, setPost] = useState(props.post)
-  const [picture, setPicture] = useState(props.imageUrl)
+  const [picture, setPicture] = useState('')
 
   const [modal, setModal] = useState(false)
 
@@ -109,13 +113,7 @@ export default function ModalPut(props) {
   // Syntaxe JSX --------------------------------------------------
   return (
     <>
-      <IconUpdate
-        onClick={toggleModal}
-        src={iconUpdate}
-        alt="icon update"
-        height={35}
-        width={35}
-      />
+      <IconUpdate onClick={toggleModal} src={iconUpdate} alt="icon update" />
       {modal && (
         <Overlay>
           <ModalStyled>
@@ -150,8 +148,6 @@ export default function ModalPut(props) {
                 onClick={toggleModal}
                 src={iconCancel}
                 alt="icon annuler"
-                height={35}
-                width={35}
               />
             </div>
           </ModalStyled>

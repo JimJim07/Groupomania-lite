@@ -12,8 +12,6 @@ _____________________________
 
 * Installez les dépendances : `cd backend` + `npm install`
 
-* Créez un dossier `images` à la racine du dossier `backend/`
-
 * Créez le fichier `.env` dans `backend/config/` avec les données suivantes
 
    - PORT=7000 `port localhost`

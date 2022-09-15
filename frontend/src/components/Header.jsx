@@ -45,7 +45,7 @@ const DivUser = styled.div`
 `
 const LinkStyled = styled(Link)`
   text-decoration: none;
-  color: white;
+  color: ${colors.white};
   padding: 8px;
   border-radius: 10px;
   margin: 0 10px;
@@ -57,15 +57,13 @@ const LinkStyled = styled(Link)`
 
 // Composant --------------------------------------------------
 export default function Header() {
-  const { infoUser, connexion, setConnexion, setIfAdmin } =
-    useContext(InfoContext)
+  const { infoUser, connexion, setConnexion } = useContext(InfoContext)
 
   const navigate = useNavigate()
 
   function deconnection() {
     console.log({ message: 'Déconnexion' })
     setConnexion(false)
-    setIfAdmin(false)
     localStorage.clear()
     Cookies.remove('token')
     navigate('/')

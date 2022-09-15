@@ -1,5 +1,4 @@
-import React, { useState } from 'react'
-import { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import Cookies from 'js-cookie'
 import styled from 'styled-components'
 import iconDelete from '../assets/delete.png'
@@ -7,11 +6,13 @@ import iconLike from '../assets/love.png'
 import iconUnlike from '../assets/unlove.png'
 import ModalPutPost from './ModalPutPost'
 import { dateParser } from '../utils/dateFormat'
+import colors from '../styles/colors'
 
 // styled-components -----------------------------------------
 const ContainerCard = styled.div`
   max-width: 800px;
   width: 95%;
+  background: ${colors.white};
   padding: 20px;
   margin: 10px auto;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
@@ -67,15 +68,12 @@ const IconLike = styled.img`
 
 // Composant  --------------------------------------------------
 export default function Card(props) {
-  // console.log(props)
-  const userId = localStorage.getItem('userId')
   const adminId = localStorage.getItem('adminId')
+  const userId = localStorage.getItem('userId')
   const token = Cookies.get('token')
 
   const [pseudo, setPseudo] = useState('Admin')
-
   const [nbLike, setNbLike] = useState(props.likers.length)
-
   const [liked, setLiked] = useState(false)
 
   function like(userId, postId) {
@@ -83,6 +81,7 @@ export default function Card(props) {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token,
       },
       body: JSON.stringify({ id: userId }),
     })
@@ -99,6 +98,7 @@ export default function Card(props) {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token,
       },
       body: JSON.stringify({ id: userId }),
     })
@@ -110,6 +110,7 @@ export default function Card(props) {
       .catch((err) => console.log(err))
   }
 
+  // Verifie si l' userId à déjà liker
   useEffect(() => {
     if (props.likers.includes(userId)) {
       setLiked(true)
@@ -136,6 +137,7 @@ export default function Card(props) {
       .catch((error) => console.log(error))
   }
 
+  // Affiche les pseudo
   useEffect(() => {
     fetch(`http://localhost:7000/api/user/${props.posterId}`, {
       headers: {
@@ -161,6 +163,7 @@ export default function Card(props) {
         </div>
 
         <p>{props.post}</p>
+
         <DivMiddle1>
           {!liked ? (
             <IconLike

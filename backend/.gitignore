@@ -3,6 +3,3 @@ node_modules
 
 # Dotenv
 config/.env
-
-#images
-images
