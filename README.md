@@ -1,5 +1,5 @@
 # Javascript full-stack 
-## Groupomania P7
+## Groupomania-lite P7
 ### React / Express / MongoDB
 
 Voici le dernier projet de ma formation Openclassrooms, création d'un réseau social d'entreprise : Groupomania
