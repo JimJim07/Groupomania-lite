@@ -4,7 +4,8 @@ const colors = {
     tertiary: "#4e5166",
     light: '#F9F9FC',
     dark: '#4F4C6B',
-    white: '#fff'
+    white: '#fff',
+    blue: '#3397da'
 }
 
 export default colors
