@@ -22,6 +22,12 @@ _____________________________
    
    - TOKEN_SECRET='d7yniy2yt9hpili17hk3o4b6rf4462z9ca90gu5239668k9dum' `votre clé secrète aléatoire`
 
+   - ADMIN_PSEUDO='Admin' `Votre Pseudo Admin`
+   - ADMIN_EMAIL='admin@test.fr' `Votre Email Admin`
+   - TADMIN_PASSWORD='Admin123' `Votre Password Admin`
+
+* Créez un dossier vide `images` à la racine du dossier `backend`
+
 * Démarrer le server : `npm start`
 ______________________________
   
