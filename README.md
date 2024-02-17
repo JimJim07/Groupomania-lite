@@ -18,13 +18,13 @@ _____________________________
 
    - CLIENT_URL='http://localhost:3000' `URL client`
 
-   - DB_USER_PASS='mongodb+srv://`Votre identifiant`:`Votre password`@cluster0.sdyji.mongodb.net/groupomania-lite?retryWrites=true&w=majority'
+   - DB_USER_PASS='`Votre Url connect MongoDB`'
    
-   - TOKEN_SECRET='d7yniy2yt9hpili17hk3o4b6rf4462z9ca90gu5239668k9dum' `votre clé secrète aléatoire`
+   - TOKEN_SECRET='`Votre clé secrète aléatoire`'
 
-   - ADMIN_PSEUDO='Admin' `Votre Pseudo Admin`
-   - ADMIN_EMAIL='admin@test.fr' `Votre Email Admin`
-   - TADMIN_PASSWORD='Admin123' `Votre Password Admin`
+   - ADMIN_PSEUDO='`Votre Pseudo Admin`' 
+   - ADMIN_EMAIL='`Votre Email Admin`' 
+   - TADMIN_PASSWORD='`Votre Password Admin`'
 
 * Créez un dossier vide `images` à la racine du dossier `backend`
 
