@@ -4,8 +4,8 @@ require('./config/db')
 const express = require('express');
 const path = require('path');
 
-const userRoutes = require('./routes/user.routes');
-const postRoutes = require('./routes/post.routes');
+const userRoutes = require('./routes/user');
+const postRoutes = require('./routes/post');
 
 // Création de l'application express    
 const app = express();

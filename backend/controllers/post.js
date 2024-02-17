@@ -1,7 +1,7 @@
 // Importation des packages
 const fs = require('fs');
-const PostModel = require('../models/Post.model');
-const UserModel = require('../models/User.model');
+const PostModel = require('../models/Post');
+const UserModel = require('../models/User');
 
 exports.createPost = (req, res, next) => {
     const post = new PostModel({
