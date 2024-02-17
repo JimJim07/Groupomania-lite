@@ -1,85 +1,135 @@
 // Importation des packages
-const fs = require('fs');
+const fsPromises = require('fs').promises;
 const PostModel = require('../models/Post');
 const UserModel = require('../models/User');
 
-exports.createPost = (req, res, next) => {
-    const post = new PostModel({
-        posterId: req.auth.userId,
-        post: req.body.post,
-        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
-        likers: [],
-    });
-    post.save()
-        .then(() => { res.status(201).json({ message: 'Objet enregistré !' }) })
-        .catch(error => { res.status(400).json({ error }) })
-};
+exports.createPost = async (req, res) => {
+    try {
+        const { userId } = req.auth;
+        const { post } = req.body;
+        const imageUrl = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
 
-exports.modifyPost = (req, res) => {
+        const newPost = new PostModel({ posterId: userId, post, imageUrl, likers: [] });
+        await newPost.save();
 
-    if (req.file) {
-        PostModel.findOne({ _id: req.params.id })
-            .then(post => {
-                if (req.auth.adminId || post.posterId === req.auth.userId) {
-                    // Supprime l'ancienne image
-                    const filename = post.imageUrl.split('/images/')[1];
-                    fs.unlink(`images/${filename}`, () => {
-                        const postObject = {
-                            post: req.body.post,
-                            imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
-                        }
-                        PostModel.updateOne({ _id: req.params.id }, { ...postObject, _id: req.params.id })
-                            .then(() => res.status(200).json({ message: 'Post modifiée!' }))
-                            .catch(error => res.status(400).json({ error }));
-                    })
-                } else {
-                    res.status(401).json({ message: 'Not authorized' });
-                }
-
-            })
-            .catch(error => res.status(500).json({ error }));
-    } else {
-        const postObject = { ...req.body };
-        PostModel.findOne({ _id: req.params.id })
-            .then(post => {
-                if (req.auth.adminId || post.posterId === req.auth.userId) {
-                    PostModel.updateOne({ _id: req.params.id }, { ...postObject, _id: req.params.id })
-                        .then(() => res.status(200).json({ message: 'Post modifiée!' }))
-                        .catch(error => res.status(401).json({ error }));
-                } else {
-                    res.status(401).json({ message: 'Not authorized' });
-                }
-            })
-            .catch((error) => {
-                res.status(400).json({ error });
-            });
+        res.status(201).json({ message: 'Post enregistré !' });
+    } catch (error) {
+        res.status(400).json({ error });
     }
 };
 
-exports.deleteOnePost = (req, res) => {
-    PostModel.findOne({ _id: req.params.id })
-        .then(post => {
-            if (req.auth.adminId || post.posterId === req.auth.userId) {
-                // Supprime l'image
+exports.modifyPost = async (req, res) => {
+    try {
+        const { userId } = req.auth;
+
+        const user = await UserModel.findById(userId)
+        if (!user) {
+            return res.status(404).json({ message: 'Utilisateur introuvable' });
+        }
+
+        const post = await PostModel.findById(req.params.id);
+        if (!post) {
+            return res.status(404).json({ message: 'Post introuvable' });
+        }
+
+        if (user.admin || userId === post.posterId) {
+
+            if (req.file) {
                 const filename = post.imageUrl.split('/images/')[1];
-                fs.unlink(`images/${filename}`, () => {
-                    PostModel.deleteOne({ _id: req.params.id })
-                        .then(() => { res.status(200).json({ message: 'Post supprimée !' }) })
-                        .catch(error => res.status(401).json({ error }));
-                });
-            } else {
-                res.status(401).json({ message: 'Non autoriser' });
+                await fsPromises.unlink(`images/${filename}`);
+                post.imageUrl = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
             }
-        })
-        .catch(error => {
-            res.status(500).json({ error });
-        });
+
+            post.post = req.body.post;
+            await post.save();
+
+            res.status(200).json({ message: 'Post modifié !' });
+        } else {
+            return res.status(403).json({ message: 'Non autorisé' });
+        }
+
+    } catch (error) {
+        res.status(500).json({ error });
+    }
 };
 
-exports.getAllPosts = (req, res) => {
-    PostModel.find()
-        .then(posts => res.status(200).json(posts))
-        .catch(error => res.status(400).json({ error }))
+exports.deleteOnePost = async (req, res) => {
+    try {
+        const { userId } = req.auth;
+
+        const user = await UserModel.findById(userId);
+        if (!user) {
+            return res.status(404).json({ message: 'Utilisateur introuvable' });
+        }
+
+        const post = await PostModel.findById(req.params.id);
+        if (!post) {
+            return res.status(404).json({ message: 'Post introuvable' });
+        }
+
+        if (user.admin || userId === post.posterId) {
+            const filename = post.imageUrl.split('/images/')[1];
+            await fsPromises.unlink(`images/${filename}`);
+            await post.deleteOne();
+            return res.status(200).json({ message: 'Post supprimé !' });
+        } else {
+            return res.status(403).json({ message: 'Non autorisé' });
+        }
+
+    } catch (error) {
+        return res.status(500).json({ error });
+    }
+};
+
+exports.deleteAllPosts = async (req, res) => {
+    try {
+        const { userId } = req.auth;
+
+        const user = await UserModel.findById(userId);
+        if (!user) {
+            return res.status(404).json({ message: 'Utilisateur introuvable' });
+        }
+
+        if (!user.admin) {
+            return res.status(403).json({ message: 'Non autorisé' });
+        }
+
+        const directoryPath = './images';
+
+        const files = await fsPromises.readdir(directoryPath);
+
+        if (!files.length) {
+            return res.status(200).json({ message: 'Aucun fichier à supprimer dans le dossier images' });
+        }
+
+        for (const file of files) {
+            await fsPromises.unlink(`${directoryPath}/${file}`);
+            console.log(`Le fichier ${file} a été supprimé.`);
+        }
+        await PostModel.deleteMany();
+
+        return res.status(200).json({ message: 'Tous les posts on été suprimés' });
+    } catch (error) {
+        return res.status(500).json({ error });
+    }
+};
+
+exports.getAllPosts = async (req, res) => {
+    try {
+        const posts = await PostModel.find();
+        res.status(200).json(posts);
+    } catch (error) {
+        res.status(400).json({ error });
+    }
+};
+
+exports.getOnePost = async (req, res) => {
+    try {
+        const post = await PostModel.findById(req.params.id);
+        res.status(200).json(post);
+    } catch (error) {
+        res.status(400).json({ error });
+    }
 };
 
 exports.likePost = (req, res) => {
