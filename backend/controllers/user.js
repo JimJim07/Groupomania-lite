@@ -4,9 +4,9 @@ const jwt = require('jsonwebtoken');
 const UserModel = require('../models/User');
 
 const Admin = {
-    pseudo: "Admin",
-    email: "admin@test.fr",
-    password: "Admin123"
+    pseudo: process.env.ADMIN_PSEUDO,
+    email: process.env.ADMIN_EMAIL,
+    password: process.env.ADMIN_PASSWORD
 }
 
 exports.signup = async (req, res) => {
