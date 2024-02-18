@@ -111,7 +111,6 @@ export default function Login() {
           setTxtError('Paire identifiant / mot de passe incorrecte')
         } else {
           console.log({ message: 'Connexion réussie' })
-          if (data.adminId) localStorage.setItem('adminId', data.adminId)
           if (data.userId) localStorage.setItem('userId', data.userId)
           Cookies.set('token', data.token, { expires: 1, secure: true })
           navigate('/home')
