@@ -1,12 +1,11 @@
-// Importation des packages
 const fsPromises = require('fs').promises;
 const PostModel = require('../models/Post');
 const UserModel = require('../models/User');
 
 exports.createPost = async (req, res) => {
     try {
-        const { userId } = req.auth;
-        const { post } = req.body;
+        const userId = req.auth.userId;
+        const post = req.body.post;
         const imageUrl = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
 
         const newPost = new PostModel({ posterId: userId, post, imageUrl, likers: [] });
@@ -20,7 +19,7 @@ exports.createPost = async (req, res) => {
 
 exports.modifyPost = async (req, res) => {
     try {
-        const { userId } = req.auth;
+        const userId = req.auth.userId;
 
         const user = await UserModel.findById(userId)
         if (!user) {
@@ -55,22 +54,33 @@ exports.modifyPost = async (req, res) => {
 
 exports.deleteOnePost = async (req, res) => {
     try {
-        const { userId } = req.auth;
+        const userId = req.auth.userId;
+        const postId = req.params.id
 
         const user = await UserModel.findById(userId);
         if (!user) {
             return res.status(404).json({ message: 'Utilisateur introuvable' });
         }
 
-        const post = await PostModel.findById(req.params.id);
+        const post = await PostModel.findById(postId);
         if (!post) {
             return res.status(404).json({ message: 'Post introuvable' });
         }
 
         if (user.admin || userId === post.posterId) {
+            // Récupérez la liste des utilisateurs qui ont aimé le post
+            const usersWhoLikedPost = await UserModel.find({ likes: postId });
+
+            // Retirez le post de la liste des likes de chaque utilisateur
+            for (const likedUser of usersWhoLikedPost) {
+                await UserModel.findByIdAndUpdate(likedUser._id, { $pull: { likes: postId } });
+            }
+
+            // Supprimez le post
             const filename = post.imageUrl.split('/images/')[1];
             await fsPromises.unlink(`images/${filename}`);
             await post.deleteOne();
+
             return res.status(200).json({ message: 'Post supprimé !' });
         } else {
             return res.status(403).json({ message: 'Non autorisé' });
@@ -83,7 +93,7 @@ exports.deleteOnePost = async (req, res) => {
 
 exports.deleteAllPosts = async (req, res) => {
     try {
-        const { userId } = req.auth;
+        const userId = req.auth.userId;
 
         const user = await UserModel.findById(userId);
         if (!user) {
@@ -95,20 +105,33 @@ exports.deleteAllPosts = async (req, res) => {
         }
 
         const directoryPath = './images';
-
         const files = await fsPromises.readdir(directoryPath);
 
         if (!files.length) {
             return res.status(200).json({ message: 'Aucun fichier à supprimer dans le dossier images' });
         }
 
+        // Récupérer tous les posts avant de les supprimer
+        const posts = await PostModel.find();
+
+        // Retirer chaque post de la liste de likes de chaque utilisateur
+        for (const post of posts) {
+            const usersWhoLikedPost = await UserModel.find({ likes: post._id });
+            for (const likedUser of usersWhoLikedPost) {
+                await UserModel.findByIdAndUpdate(likedUser._id, { $pull: { likes: post._id } });
+            }
+        }
+
+        // Supprimer tous les fichiers images
         for (const file of files) {
             await fsPromises.unlink(`${directoryPath}/${file}`);
             console.log(`Le fichier ${file} a été supprimé.`);
         }
+
+        // Supprimer tous les posts
         await PostModel.deleteMany();
 
-        return res.status(200).json({ message: 'Tous les posts on été suprimés' });
+        return res.status(200).json({ message: 'Tous les posts ont été supprimés' });
     } catch (error) {
         return res.status(500).json({ error });
     }
@@ -132,58 +155,60 @@ exports.getOnePost = async (req, res) => {
     }
 };
 
-exports.likePost = (req, res) => {
+exports.likePost = async (req, res) => {
     try {
-        PostModel.findByIdAndUpdate(
-            req.params.id,
-            {
-                $addToSet: { likers: req.body.id }
-            },
-            { new: true },
-            (err, docs) => {
-                if (err) res.status(400).send(err);
-                else return res.send(docs);
-            }
-        )
-        UserModel.findByIdAndUpdate(
-            req.body.id,
-            {
-                $addToSet: { likes: req.params.id }
-            },
-            { new: true },
-            (err) => {
-                if (err) return res.status(400).send(err);
-            }
-        )
-    } catch (err) {
-        return res.status(402).send(err);
+        const userId = req.auth.userId;
+        const postId = req.params.id
+
+        // Recherche du post
+        const post = await PostModel.findById(postId);
+        if (!post) {
+            return res.status(404).json({ message: 'Post introuvable' });
+        }
+
+        const updatedPost = await PostModel.findByIdAndUpdate(
+            postId,
+            { $addToSet: { likers: userId } },
+            { new: true }
+        ).select('_id posterId likers');
+
+        const updatedUser = await UserModel.findByIdAndUpdate(
+            userId,
+            { $addToSet: { likes: postId } },
+            { new: true }
+        ).select('pseudo likes');
+
+        return res.status(200).json({ updatedPost, updatedUser });
+    } catch (error) {
+        return res.status(500).json({ error: error.message });
     }
 };
 
-exports.unlikePost = (req, res) => {
+exports.unlikePost = async (req, res) => {
     try {
-        PostModel.findByIdAndUpdate(
-            req.params.id,
-            {
-                $pull: { likers: req.body.id }
-            },
-            { new: true },
-            (err, docs) => {
-                if (err) res.status(400).send(err);
-                else return res.send(docs);
-            }
-        )
-        UserModel.findByIdAndUpdate(
-            req.body.id,
-            {
-                $pull: { likes: req.params.id }
-            },
-            { new: true },
-            (err) => {
-                if (err) return res.status(400).send(err);
-            }
-        )
-    } catch (err) {
-        return res.status(400).send(err);
+        const userId = req.auth.userId;
+        const postId = req.params.id;
+
+        // Recherche du post
+        const post = await PostModel.findById(postId);
+        if (!post) {
+            return res.status(404).json({ message: 'Post introuvable' });
+        }
+
+        const updatedPost = await PostModel.findByIdAndUpdate(
+            postId,
+            { $pull: { likers: userId } },
+            { new: true }
+        ).select('_id posterId likers');
+
+        const updatedUser = await UserModel.findByIdAndUpdate(
+            userId,
+            { $pull: { likes: postId } },
+            { new: true }
+        ).select('pseudo likes');
+
+        return res.status(200).json({ updatedPost, updatedUser });
+    } catch (error) {
+        return res.status(500).json({ error: error.message });
     }
 };
