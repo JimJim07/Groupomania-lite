@@ -7,7 +7,8 @@ import { dateParser } from '../../utils/dateFormat'
 import './Card.css'
 import fetchData from '../../Fetch/fetchData'
 
-export default function Card({ item, id, update, setUpdate }) {
+export default function Card({ item, deleteOnePost }) {
+  console.log(item);
   const { _id, imageUrl, post, posterId, updatedAt } = item
 
   const userId = localStorage.getItem('userId')
@@ -28,28 +29,6 @@ export default function Card({ item, id, update, setUpdate }) {
       const data = await fetchData(url, options);
 
       setLiked(!liked)
-
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  const deletePost = async (e, postId, token) => {
-
-    try {
-      const url = `http://localhost:7000/api/post/${postId}`
-      const options = {
-        method: 'DELETE',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` }
-      };
-
-      await fetchData(url, options);
-
-      const target = e.target
-      const element = target.closest(".Card")
-      element.remove()
-
-      setUpdate(!update)
 
     } catch (error) {
       console.log(error);
@@ -78,11 +57,7 @@ export default function Card({ item, id, update, setUpdate }) {
           className='Card__trash'
           src={iconDelete}
           alt="img delete"
-          onClick={(e) => {
-            if (window.confirm('La suppression de ce post sera définitive')) {
-              deletePost(e, _id, token)
-            }
-          }} />
+          onClick={() => { deleteOnePost(_id) }} />
       </div>
     </div>
   )
