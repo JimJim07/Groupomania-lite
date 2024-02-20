@@ -56,6 +56,7 @@ export default function Signup({ signupOrLogin, setSignupOrLogin }) {
       navigate('/home')
     } catch (error) {
       console.log(error);
+      setTxtError('Peudo déja utilisé')
     }
   }
 

@@ -12,7 +12,6 @@ export default function FormHome({ update, setUpdate }) {
   const onSubmitHandle = async (e) => {
     try {
       e.preventDefault();
-      setUpdate(!update)
       console.log(update);
 
       const formData = new FormData();
@@ -30,11 +29,11 @@ export default function FormHome({ update, setUpdate }) {
 
       const dataFetch = await fetchData(url, options);
       console.log(dataFetch);
+      setUpdate(!update)
     } catch (error) {
       console.log(error);
     }
   };
-
 
   // Syntaxe JSX --------------------------------------------------
   return (

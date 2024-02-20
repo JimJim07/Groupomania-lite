@@ -3,6 +3,7 @@ import Cookies from 'js-cookie';
 import fetchData from '../Fetch/fetchData.js';
 import FormHome from '../components/FormHome.jsx';
 import Card from '../components/Card/Card.jsx'
+import { nanoid } from 'nanoid'
 import './Home.css'
 
 export default function Home() {
@@ -22,14 +23,14 @@ export default function Home() {
             setPosts(data);
         }
         getData();
-    }, [update]); // Mettre update dans le tableau de dépendances
+    }, [update]);
 
     return (
         <div className='Home'>
             <FormHome update={update} setUpdate={setUpdate} />
 
             {posts.map((item) =>
-                <Card key={item._id} item={item} update={update} setUpdate={setUpdate} />
+                <Card key={nanoid()} item={item} id={nanoid()} update={update} setUpdate={setUpdate} />
             )}
         </div>
     );

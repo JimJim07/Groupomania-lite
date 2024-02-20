@@ -7,7 +7,7 @@ import { dateParser } from '../../utils/dateFormat'
 import './Card.css'
 import fetchData from '../../Fetch/fetchData'
 
-export default function Card({ item, update, setUpdate }) {
+export default function Card({ item, id, update, setUpdate }) {
   const { _id, imageUrl, post, posterId, updatedAt } = item
 
   const userId = localStorage.getItem('userId')
