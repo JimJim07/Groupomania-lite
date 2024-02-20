@@ -32,7 +32,7 @@ export default function Login({ signupOrLogin, setSignupOrLogin }) {
 
     } catch (error) {
       console.error(error);
-      setTxtError("Une erreur s'est produite lors de la connexion. Veuillez réessayer.");
+      setTxtError("Paire identifiant/mot de passe incorrecte");
     }
   };
 
