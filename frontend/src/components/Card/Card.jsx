@@ -5,8 +5,9 @@ import iconLike from '../../assets/love.png'
 import iconUnlike from '../../assets/unlove.png'
 import { dateParser } from '../../utils/dateFormat'
 import './Card.css'
+import fetchData from '../../Fetch/fetchData'
 
-export default function Card({ item }) {
+export default function Card({ item, update, setUpdate }) {
   const { _id, imageUrl, post, posterId, updatedAt } = item
 
   const userId = localStorage.getItem('userId')
@@ -14,21 +15,18 @@ export default function Card({ item }) {
 
   const [liked, setLiked] = useState(false)
 
-  const likeAndUnlikePost = async (url) => {
+  const likeAndUnlikePost = async () => {
     try {
-      const response = await fetch(url, {
+
+      const url = `http://localhost:7000/api/post/${liked ? 'like' : 'unlike'}/${_id}`
+      const options = {
         method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + token,
-        },
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({ id: userId })
-      })
-      if (!response.ok) {
-        throw new Error('Problème serveur')
-      }
-      const data = await response.json()
-      console.log(data);
+      };
+
+      const data = await fetchData(url, options);
+
       setLiked(!liked)
 
     } catch (error) {
@@ -36,34 +34,28 @@ export default function Card({ item }) {
     }
   }
 
-  const deletePost = async (postId, token, e) => {
+  const deletePost = async (e, postId, token) => {
 
     try {
-
-      const response = await fetch(`http://localhost:7000/api/post/${postId}`, {
+      const url = `http://localhost:7000/api/post/${postId}`
+      const options = {
         method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + token,
-        },
-      })
-      console.log(response);
-      if (!response.ok) {
-        throw new Error('Problème serveur')
-      }
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` }
+      };
+
+      await fetchData(url, options);
 
       const target = e.target
       const element = target.closest(".Card")
       element.remove()
 
-      const data = await response.json()
-      // console.log(data);
+      setUpdate(!update)
+
     } catch (error) {
       console.log(error);
     }
   }
 
-  // Syntaxe JSX --------------------------------------------------
   return (
     <div className='Card'>
       <img className='Card__img' src={imageUrl} alt="Images du Post" />
@@ -74,8 +66,8 @@ export default function Card({ item }) {
         <p>{post}</p>
         <div className='Card__ContainerHeart'>
           <img
-            className='Card__heart cursor__pointer'
-            onClick={() => likeAndUnlikePost(`http://localhost:7000/api/post/${liked ? 'like' : 'unlike'}/${_id}`)}
+            className='Card__heart'
+            onClick={() => likeAndUnlikePost()}
             src={liked ? iconLike : iconUnlike}
             alt="" />
           <p>{liked ? 1 : 0}</p>
@@ -83,13 +75,12 @@ export default function Card({ item }) {
       </div>
       <div>
         <img
-          className='cursor__pointer'
+          className='Card__trash'
           src={iconDelete}
           alt="img delete"
-          width={30}
           onClick={(e) => {
             if (window.confirm('La suppression de ce post sera définitive')) {
-              deletePost(_id, token, e)
+              deletePost(e, _id, token)
             }
           }} />
       </div>

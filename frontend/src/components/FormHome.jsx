@@ -1,76 +1,46 @@
 import React, { useState } from 'react'
 import Cookies from 'js-cookie'
-import styled from 'styled-components'
-import colors from '../styles/colors'
+import fetchData from '../Fetch/fetchData.js'
+import './FormHome.css';
 
-// Styled-components -------------------------------------------------
-const FormStyled = styled.form`
-  max-width: 800px;
-  width: 95%;
-  margin: auto;
-  display: flex;
-  flex-direction: column;
-`
-const Input = styled.input`
-  font-size: 18px;
-  width: 100%;
-  margin-bottom: 15px;
-`
-const Textarea = styled.textarea`
-  font-size: 18px;
-  width: 100%;
-  padding: 8px;
-  margin-bottom: 10px;
-  font-family: Arial, Helvetica, sans-serif;
-`
-const Button = styled.button`
-  font-size: 16px;
-  padding: 10px 15px;
-  width: 200px;
-  background: transparent;
-  border: 1px solid rgba(0, 0, 0, 0.8);
-  border-radius: 3px;
-  cursor: pointer;
-  &:hover {
-    background: ${colors.light};
-  }
-`
-
-// Composant --------------------------------------------------
-export default function FormHome(props) {
+export default function FormHome({ update, setUpdate }) {
   const token = Cookies.get('token')
 
   const [post, setPost] = useState('')
   const [picture, setPicture] = useState('')
 
-  function onSubmitHandler(e) {
-    e.preventDefault()
+  const onSubmitHandle = async (e) => {
+    try {
+      e.preventDefault();
+      setUpdate(!update)
+      console.log(update);
 
-    const data = new FormData()
-    data.append('image', picture)
-    data.append('post', post)
+      const formData = new FormData();
+      formData.append('image', picture);
+      formData.append('post', post);
 
-    fetch('http://localhost:7000/api/post', {
-      method: 'POST',
-      headers: {
-        Authorization: 'Bearer ' + token,
-      },
-      body: data,
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data)
-        setPost('')
-        props.callApiPost(token)
-      })
-      .catch((err) => console.log({ message: err }))
-  }
+      const url = 'http://localhost:7000/api/post';
+      const options = {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+        body: formData,
+      };
+
+      const dataFetch = await fetchData(url, options);
+      console.log(dataFetch);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
 
   // Syntaxe JSX --------------------------------------------------
   return (
-    <FormStyled onSubmit={onSubmitHandler}>
+    <form className='FormHome' onSubmit={onSubmitHandle}>
       <label>
-        <Input
+        <input className='FormHome__input'
           type="file"
           name="file"
           accept=".jpg,.jpeg,.png,"
@@ -80,7 +50,7 @@ export default function FormHome(props) {
       </label>
 
       <label>
-        <Textarea
+        <textarea className='FormHome__textarea'
           type="text"
           name="post"
           maxLength={250}
@@ -88,9 +58,9 @@ export default function FormHome(props) {
           value={post}
           onChange={(e) => setPost(e.target.value)}
           required
-        ></Textarea>
+        ></textarea>
       </label>
-      <Button>Publier le post</Button>
-    </FormStyled>
+      <button className='FormHome__btn'>Publier le post</button>
+    </form>
   )
 }

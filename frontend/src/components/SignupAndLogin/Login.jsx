@@ -1,48 +1,46 @@
 import { useState } from 'react'
-import { /*Link,*/ useNavigate } from 'react-router-dom'
+import { useNavigate/*, Link*/ } from 'react-router-dom'
 import Cookies from 'js-cookie'
+import fetchData from '../../Fetch/fetchData.js'
 import "./S-L.css"
 
 export default function Login({ signupOrLogin, setSignupOrLogin }) {
+  const navigate = useNavigate()
+
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
   const [txtError, setTxtError] = useState('')
 
-  const navigate = useNavigate()
+  const infoUser = {
+    email: email,
+    password: password,
+  }
 
-  function addUser(e) {
+  async function login(e) {
     e.preventDefault()
-    const infoUser = {
-      email: email,
-      password: password,
-    }
+    try {
+      const url = 'http://localhost:7000/api/user/login';
+      const options = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(infoUser)
+      };
 
-    fetch('http://localhost:7000/api/user/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(infoUser),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.message) {
-          console.log(data)
-          setTxtError('Paire identifiant / mot de passe incorrecte')
-        } else {
-          console.log({ message: 'Connexion réussie' })
-          if (data.userId) localStorage.setItem('userId', data.userId)
-          Cookies.set('token', data.token, { expires: 1, secure: true })
-          navigate('/home')
-        }
-      })
+      const data = await fetchData(url, options);
+
+      localStorage.setItem('userId', data.userId)
+      Cookies.set('token', data.token, { expires: 1, secure: true })
+      navigate('/home')
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   return (
     <div className='S-L'>
       <p className='S-L__title'>Connexion</p>
-      <form className='S-L__form' onSubmit={addUser}>
+      <form className='S-L__form' onSubmit={login}>
         <label>
           <input
             type="email"

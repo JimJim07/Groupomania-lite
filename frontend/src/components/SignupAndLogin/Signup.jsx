@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useNavigate/*, Link*/ } from 'react-router-dom'
 import Cookies from 'js-cookie'
+import fetchData from '../../Fetch/fetchData.js'
 
 import "./S-L.css"
 
@@ -19,46 +20,37 @@ export default function Signup({ signupOrLogin, setSignupOrLogin }) {
 
   const [txtError, setTxtError] = useState('')
 
-  const fetchAuth = async (e, url, userInfo) => {
+  const signup = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(url, {
+
+      const url = 'http://localhost:7000/api/user/signup';
+      const options = {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(userInfo),
-      });
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(infoUser)
+      };
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Une erreur est survenue lors de l\'authentification');
-      }
+      await fetchData(url, options);
 
-      const data = await response.json();
-      console.log(data);
       afterSignup(infoUser)
     } catch (error) {
-      setTxtError(error.message);
+      console.log(error);
     }
   };
 
   const afterSignup = async (infoUser) => {
     try {
-      const response = await fetch('http://localhost:7000/api/user/login', {
+
+      const url = 'http://localhost:7000/api/user/login';
+      const options = {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(infoUser),
-      })
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(infoUser)
+      };
 
-      if (!response.ok) {
-        throw new Error('Un problème est survenu')
-      }
+      const data = await fetchData(url, options);
 
-      const data = await response.json()
-      console.log(data);
       localStorage.setItem('userId', data.userId)
       Cookies.set('token', data.token, { expires: 1, secure: true })
       navigate('/home')
@@ -70,7 +62,7 @@ export default function Signup({ signupOrLogin, setSignupOrLogin }) {
   return (
     <div className='S-L'>
       <p className='S-L__title'>Inscription</p>
-      <form className='S-L__form' onSubmit={(e) => fetchAuth(e, 'http://localhost:7000/api/user/signup', infoUser)}>
+      <form className='S-L__form' onSubmit={signup}>
         <label>
           <input
             type="text"
