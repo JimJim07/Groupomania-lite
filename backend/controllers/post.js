@@ -5,10 +5,14 @@ const UserModel = require('../models/User');
 exports.createPost = async (req, res) => {
     try {
         const userId = req.auth.userId;
+        const user = await UserModel.findById(userId)
+        if (!user) {
+            return res.status(404).json({ message: 'Utilisateur introuvable' });
+        }
         const post = req.body.post;
         const imageUrl = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
 
-        const newPost = new PostModel({ posterId: userId, post, imageUrl, likers: [] });
+        const newPost = new PostModel({ posterId: userId, posterPseudo: user.pseudo, post, imageUrl, likers: [] });
         await newPost.save();
 
         res.status(201).json({ message: 'Post enregistré !' });

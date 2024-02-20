@@ -8,6 +8,10 @@ const postSchema = mongoose.Schema(
             type: String,
             required: true
         },
+        posterPseudo: {
+            type: String,
+            required: true
+        },
         post: {
             type: String,
             maxlength: 250,
