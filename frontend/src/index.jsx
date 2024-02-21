@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import Header from './components/Header'
+import Header from './components/Header/Header'
 import Auth from './pages/Auth'
 import Home from './pages/Home'
 import InfoContextProvider from './Context/InfoContext'
@@ -15,9 +15,6 @@ root.render(
       <Routes>
         <Route path="/" element={<Auth />} />
         <Route path="/home" element={<Home />} />
-        {/* <Route path="/signup" element={<Signup />} />
-        <Route path="/" element={<Login />} />
-        <Route path="*" element={<Login />} /> */}
       </Routes>
     </InfoContextProvider>
   </BrowserRouter>

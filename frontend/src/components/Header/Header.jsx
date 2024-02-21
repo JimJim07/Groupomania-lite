@@ -1,8 +1,8 @@
 // import { useContext } from 'react'
 // import { InfoContext } from '../Context/InfoContext'
 import Cookies from 'js-cookie'
-import { /*Link,*/ useNavigate } from 'react-router-dom'
-import logo from '../assets/icon-white.svg'
+import { useNavigate } from 'react-router-dom'
+import logo from '../../assets/icon-white.svg'
 import './Header.css'
 
 // Composant --------------------------------------------------

@@ -1,24 +1,24 @@
 .Header {
     background-color: var(--primary--color);
-    min-height: 150px;
+    min-height: 15rem;
     display: flex;
     flex-wrap: wrap;
-    padding: 5px;
+    padding: 0.5rem;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 50px;
+    margin-bottom: 5rem;
 }
 
 .Header__img {
     width: 100%;
-    max-width: 400px;
-    padding-left: 20px;
+    max-width: 40rem;
+    padding-left: 2rem;
 }
 
 .Header__container--user {
-    min-width: 150px;
-    max-width: 300px;
-    height: 80px;
+    min-width: 15rem;
+    max-width: 30rem;
+    height: 8rem;
     text-align: center;
     display: flex;
     flex-direction: column;
@@ -28,9 +28,9 @@
 .Header__btn {
     text-decoration: none;
     color: var(white);
-    padding: 8px;
-    border-radius: 10px;
-    margin: 0 10px;
+    padding: .8rem;
+    border-radius: 1rem;
+    margin: 0 1rem;
     background-color: var(--secondary--color);
 }
 
@@ -40,7 +40,7 @@
 
 @media (max-width: 630px) {
     .Header__img {
-        padding: 10px;
+        padding: 1rem;
         width: 100%;
     }
 
@@ -49,6 +49,6 @@
         max-width: 100%;
         width: 100%;
         flex-direction: row;
-        padding: 0 10px;
+        padding: 0 1rem;
     }
 }

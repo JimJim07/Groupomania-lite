@@ -8,8 +8,7 @@ import './Card.css'
 import fetchData from '../../Fetch/fetchData'
 
 export default function Card({ item, deleteOnePost }) {
-  console.log(item);
-  const { _id, imageUrl, post, posterId, updatedAt } = item
+  const { _id, imageUrl, post, posterPseudo, updatedAt } = item
 
   const userId = localStorage.getItem('userId')
   const token = Cookies.get('token')
@@ -27,7 +26,7 @@ export default function Card({ item, deleteOnePost }) {
       };
 
       const data = await fetchData(url, options);
-
+      console.log(data);
       setLiked(!liked)
 
     } catch (error) {
@@ -40,7 +39,7 @@ export default function Card({ item, deleteOnePost }) {
       <img className='Card__img' src={imageUrl} alt="Images du Post" />
       <div className='Card__content'>
         <p className='Card__date'>{dateParser(updatedAt)}</p>
-        <h3>{posterId}</h3>
+        <h3>{posterPseudo}</h3>
 
         <p>{post}</p>
         <div className='Card__ContainerHeart'>
