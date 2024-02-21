@@ -8,25 +8,34 @@ import './Card.css'
 import fetchData from '../../Fetch/fetchData'
 
 export default function Card({ item, deleteOnePost }) {
-  const { _id, imageUrl, post, posterPseudo, updatedAt } = item
-
-  const userId = localStorage.getItem('userId')
+  const { _id, imageUrl, post, posterPseudo, updatedAt, likers } = item
   const token = Cookies.get('token')
 
-  const [liked, setLiked] = useState(false)
+  const userId = localStorage.getItem('userId')
+
+  const ifAlreadyLiked = likers.find(liker => liker === userId) ? true : false
+
+  const [liked, setLiked] = useState(ifAlreadyLiked)
+  const [nbOfLikes, setNbOfLikes] = useState(likers.length)
 
   const likeAndUnlikePost = async () => {
     try {
 
-      const url = `http://localhost:7000/api/post/${liked ? 'like' : 'unlike'}/${_id}`
+      const url = `http://localhost:7000/api/post/${liked ? 'unlike' : 'like'}/${_id}`
       const options = {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({ id: userId })
       };
 
-      const data = await fetchData(url, options);
-      console.log(data);
+      await fetchData(url, options);
+
+      if (liked) {
+        setNbOfLikes(nbOfLikes - 1)
+      } else {
+        setNbOfLikes(nbOfLikes + 1)
+      }
+
       setLiked(!liked)
 
     } catch (error) {
@@ -48,7 +57,7 @@ export default function Card({ item, deleteOnePost }) {
             onClick={() => likeAndUnlikePost()}
             src={liked ? iconLike : iconUnlike}
             alt="" />
-          <p>{liked ? 1 : 0}</p>
+          <p>{nbOfLikes}</p>
         </div>
       </div>
       <div>
