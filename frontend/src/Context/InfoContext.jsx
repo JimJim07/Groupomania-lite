@@ -4,11 +4,13 @@ import { createContext } from 'react'
 export const InfoContext = createContext()
 
 const InfoContextProvider = (props) => {
-  const [pseudoCtx, setPseudoCtx] = useState('')
-  const [ifAdmin, setIfAdmin] = useState(false)
+  const [userInfoCTX, setUserInfoCTX] = useState({
+    pseudo: '',
+    ifAdmin: false
+  })
 
   return (
-    <InfoContext.Provider value={{ pseudoCtx, setPseudoCtx, ifAdmin, setIfAdmin }}>
+    <InfoContext.Provider value={{ userInfoCTX, setUserInfoCTX }}>
       {props.children}
     </InfoContext.Provider>
   )

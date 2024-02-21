@@ -6,7 +6,6 @@ import './FormHome.css';
 export default function FormHome({ update, setUpdate }) {
   const token = Cookies.get('token')
 
-
   const [post, setPost] = useState({
     txtContent: '',
     picture: ''
@@ -15,7 +14,6 @@ export default function FormHome({ update, setUpdate }) {
   const onSubmitHandle = async (e) => {
     try {
       e.preventDefault();
-      console.log(update);
 
       const formData = new FormData();
       formData.append('image', post.picture);
@@ -33,7 +31,7 @@ export default function FormHome({ update, setUpdate }) {
       const dataFetch = await fetchData(url, options);
       console.log(dataFetch);
       setUpdate(!update)
-      setPost({ ...post, txtContent: '' })
+      setPost({ txtContent: '', ...post })
     } catch (error) {
       console.log(error);
     }
@@ -47,7 +45,7 @@ export default function FormHome({ update, setUpdate }) {
           type="file"
           name="file"
           accept=".jpg,.jpeg,.png,"
-          onChange={(e) => setPost({ ...post, picture: e.target.files[0] })}
+          onChange={(e) => setPost({ picture: e.target.files[0], ...post })}
           required
         />
       </label>
@@ -59,7 +57,7 @@ export default function FormHome({ update, setUpdate }) {
           maxLength={250}
           placeholder="Votre post"
           value={post.txtContent}
-          onChange={(e) => setPost({ ...post, txtContent: e.target.value })}
+          onChange={(e) => setPost({ txtContent: e.target.value, ...post })}
           required
         ></textarea>
       </label>

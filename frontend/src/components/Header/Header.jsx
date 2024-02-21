@@ -7,7 +7,7 @@ import './Header.css'
 
 // Composant --------------------------------------------------
 export default function Header() {
-  const { pseudoCtx } = useContext(InfoContext)
+  const { userInfoCTX } = useContext(InfoContext)
   const token = Cookies.get('token')
   const navigate = useNavigate()
 
@@ -23,7 +23,7 @@ export default function Header() {
 
       {token && (
         <div className='Header__container--user'>
-          <h3>Hello {pseudoCtx}😊</h3>
+          <h3>Hello {userInfoCTX.pseudo}😊</h3>
           <button className='Header__btn cursor__pointer' onClick={deconnection}>
             Déconnection
           </button>

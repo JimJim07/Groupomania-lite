@@ -12,7 +12,7 @@ import fetchData from '../../Fetch/fetchData'
 export default function Card({ post, deleteOnePost }) {
   const { _id, imageUrl, txtContent, posterPseudo, posterId, updatedAt, likers } = post
   const token = Cookies.get('token')
-  const { ifAdmin } = useContext(InfoContext);
+  const { userInfoCTX } = useContext(InfoContext);
 
   const userId = localStorage.getItem('userId')
 
@@ -64,7 +64,7 @@ export default function Card({ post, deleteOnePost }) {
         </div>
       </div>
       <div>
-        {(ifAdmin || userId === posterId) && <img
+        {(userInfoCTX.ifAdmin || userId === posterId) && <img
           className='Card__trash'
           src={iconDelete}
           alt="img delete"
