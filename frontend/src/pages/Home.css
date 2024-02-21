@@ -3,3 +3,9 @@
     width: 95%;
     margin: auto;
 }
+
+.Home__contanier--card {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 2rem;
+}

@@ -1,6 +1,7 @@
 .FormHome {
     display: flex;
     flex-direction: column;
+    margin-bottom: 2rem;
 }
 
 .FormHome__input {
