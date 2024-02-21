@@ -12,7 +12,7 @@ const postSchema = mongoose.Schema(
             type: String,
             required: true
         },
-        post: {
+        txtContent: {
             type: String,
             maxlength: 250,
             required: true

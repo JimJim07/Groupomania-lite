@@ -9,10 +9,10 @@ exports.createPost = async (req, res) => {
         if (!user) {
             return res.status(404).json({ message: 'Utilisateur introuvable' });
         }
-        const post = req.body.post;
+        const txtContent = req.body.txtContent;
         const imageUrl = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
 
-        const newPost = new PostModel({ posterId: userId, posterPseudo: user.pseudo, post, imageUrl, likers: [] });
+        const newPost = new PostModel({ posterId: userId, posterPseudo: user.pseudo, txtContent, imageUrl, likers: [] });
         await newPost.save();
 
         res.status(201).json({ message: 'Post enregistré !' });
@@ -43,7 +43,7 @@ exports.modifyPost = async (req, res) => {
                 post.imageUrl = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
             }
 
-            post.post = req.body.post;
+            post.txtContent = req.body.txtContent;
             await post.save();
 
             res.status(200).json({ message: 'Post modifié !' });

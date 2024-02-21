@@ -7,8 +7,8 @@ import { dateParser } from '../../utils/dateFormat'
 import './Card.css'
 import fetchData from '../../Fetch/fetchData'
 
-export default function Card({ item, deleteOnePost }) {
-  const { _id, imageUrl, post, posterPseudo, updatedAt, likers } = item
+export default function Card({ post, deleteOnePost }) {
+  const { _id, imageUrl, txtContent, posterPseudo, updatedAt, likers } = post
   const token = Cookies.get('token')
 
   const userId = localStorage.getItem('userId')
@@ -50,7 +50,7 @@ export default function Card({ item, deleteOnePost }) {
         <p className='Card__date'>{dateParser(updatedAt)}</p>
         <h3>{posterPseudo}</h3>
 
-        <p>{post}</p>
+        <p>{txtContent}</p>
         <div className='Card__ContainerHeart'>
           <img
             className='Card__heart'

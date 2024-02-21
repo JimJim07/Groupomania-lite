@@ -41,7 +41,7 @@ export default function Home() {
     return (
         <main className='Home'>
             <FormHome update={update} setUpdate={setUpdate} />
-            {posts.length > 0 && posts.map((item) => <Card key={item._id} item={item} deleteOnePost={deleteOnePost} />)}
+            {posts.length > 0 && posts.map((post) => <Card key={post._id} post={post} deleteOnePost={deleteOnePost} />)}
         </main>
     );
 }
