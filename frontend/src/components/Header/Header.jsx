@@ -1,5 +1,5 @@
-// import { useContext } from 'react'
-// import { InfoContext } from '../Context/InfoContext'
+import { useContext } from 'react'
+import { InfoContext } from '../../Context/InfoContext'
 import Cookies from 'js-cookie'
 import { useNavigate } from 'react-router-dom'
 import logo from '../../assets/icon-white.svg'
@@ -7,7 +7,7 @@ import './Header.css'
 
 // Composant --------------------------------------------------
 export default function Header() {
-  // const { pseudoCtx } = useContext(InfoContext)
+  const { pseudoCtx } = useContext(InfoContext)
   const token = Cookies.get('token')
   const navigate = useNavigate()
 
@@ -19,11 +19,11 @@ export default function Header() {
 
   return (
     <header className='Header'>
-      <img className='Header__img' src={logo} alt="Logo Groupomania" width={450} height={69} />
+      <img className='Header__img' src={logo} alt="Logo Groupomania" width={450} height={50} />
 
       {token && (
         <div className='Header__container--user'>
-          <h3>😊Hello Pseudo</h3>
+          <h3>Hello {pseudoCtx}😊</h3>
           <button className='Header__btn cursor__pointer' onClick={deconnection}>
             Déconnection
           </button>
