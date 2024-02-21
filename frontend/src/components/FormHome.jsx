@@ -33,6 +33,7 @@ export default function FormHome({ update, setUpdate }) {
       const dataFetch = await fetchData(url, options);
       console.log(dataFetch);
       setUpdate(!update)
+      setPost({ ...post, txtContent: '' })
     } catch (error) {
       console.log(error);
     }

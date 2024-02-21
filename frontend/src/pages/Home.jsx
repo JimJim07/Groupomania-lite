@@ -9,7 +9,7 @@ import './Home.css'
 
 export default function Home() {
     const token = Cookies.get('token');
-    const { setPseudoCtx } = useContext(InfoContext);
+    const { setPseudoCtx, setIfAdmin } = useContext(InfoContext);
     const [posts, setPosts] = useState([]);
     const [update, setUpdate] = useState(false);
 
@@ -23,6 +23,7 @@ export default function Home() {
             };
 
             const data = await fetchData(url, options);
+            setIfAdmin(data.admin)
             setPseudoCtx(data.pseudo);
         }
         getAllPosts();

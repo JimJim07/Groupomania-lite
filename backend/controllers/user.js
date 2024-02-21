@@ -75,7 +75,7 @@ exports.login = async (req, res) => {
 
 exports.getOneUser = async (req, res) => {
     try {
-        const user = await UserModel.findOne({ _id: req.params.id }).select('pseudo');
+        const user = await UserModel.findOne({ _id: req.params.id }).select('pseudo admin');
         res.status(200).json(user);
     } catch (error) {
         res.status(400).json({ error });
@@ -84,7 +84,7 @@ exports.getOneUser = async (req, res) => {
 
 exports.getAllUsers = async (req, res) => {
     try {
-        const users = await UserModel.find().select('pseudo');
+        const users = await UserModel.find().select('pseudo admin');
         res.status(200).json(users);
     } catch (error) {
         res.status(400).json({ error });

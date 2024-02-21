@@ -1,4 +1,6 @@
 import React, { useState } from 'react'
+import { useContext } from 'react'
+import { InfoContext } from '../../Context/InfoContext'
 import Cookies from 'js-cookie'
 import iconDelete from '../../assets/delete.png'
 import iconLike from '../../assets/love.png'
@@ -8,8 +10,9 @@ import './Card.css'
 import fetchData from '../../Fetch/fetchData'
 
 export default function Card({ post, deleteOnePost }) {
-  const { _id, imageUrl, txtContent, posterPseudo, updatedAt, likers } = post
+  const { _id, imageUrl, txtContent, posterPseudo, posterId, updatedAt, likers } = post
   const token = Cookies.get('token')
+  const { ifAdmin } = useContext(InfoContext);
 
   const userId = localStorage.getItem('userId')
 
@@ -61,11 +64,12 @@ export default function Card({ post, deleteOnePost }) {
         </div>
       </div>
       <div>
-        <img
+        {(ifAdmin || userId === posterId) && <img
           className='Card__trash'
           src={iconDelete}
           alt="img delete"
-          onClick={() => { deleteOnePost(_id) }} />
+          onClick={() => { deleteOnePost(_id) }} />}
+
       </div>
     </div>
   )
