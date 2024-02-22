@@ -1,11 +1,5 @@
 .Home {
-    max-width: 80rem;
-    width: 95%;
-    margin: auto;
-}
-
-.Home__contanier--card {
-    display: flex;
-    flex-direction: column-reverse;
-    gap: 2rem;
+    max-width: 60rem;
+    width: 90%;
+    margin: 15rem auto 4rem;
 }

@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useContext } from 'react'
 import { InfoContext } from '../../Context/InfoContext'
 import Cookies from 'js-cookie'
+import pictureUser from '../../assets/simba.webp'
 import iconDelete from '../../assets/delete.png'
 import iconLike from '../../assets/love.png'
 import iconUnlike from '../../assets/unlove.png'
@@ -24,6 +25,14 @@ export default function Card({ post, deleteOnePost }) {
   const likeAndUnlikePost = async () => {
     try {
 
+      if (liked) {
+        setNbOfLikes(nbOfLikes - 1)
+      } else {
+        setNbOfLikes(nbOfLikes + 1)
+      }
+
+      setLiked(!liked)
+
       const url = `http://localhost:7000/api/post/${liked ? 'unlike' : 'like'}/${_id}`
       const options = {
         method: 'PATCH',
@@ -33,14 +42,6 @@ export default function Card({ post, deleteOnePost }) {
 
       await fetchData(url, options);
 
-      if (liked) {
-        setNbOfLikes(nbOfLikes - 1)
-      } else {
-        setNbOfLikes(nbOfLikes + 1)
-      }
-
-      setLiked(!liked)
-
     } catch (error) {
       console.log(error);
     }
@@ -48,12 +49,18 @@ export default function Card({ post, deleteOnePost }) {
 
   return (
     <div className='Card'>
-      <img className='Card__img' src={imageUrl} alt="Images du Post" />
-      <div className='Card__content'>
-        <p className='Card__date'>{dateParser(updatedAt)}</p>
-        <h3>{posterPseudo}</h3>
+      <div className='Card__header'>
+        <img className='Card__pictureUser' src={pictureUser} alt="Picture User" />
+        <div>
+          <h3>{posterPseudo}</h3>
+          <p className='Card__date'>{dateParser(updatedAt)}</p>
+        </div>
+      </div>
 
-        <p>{txtContent}</p>
+      <img className='Card__img' src={imageUrl} alt="Images du Post" />
+      <p className='Card__txt'>{txtContent}</p>
+
+      <div className='Card__ContainerBottom'>
         <div className='Card__ContainerHeart'>
           <img
             className='Card__heart'
@@ -62,8 +69,6 @@ export default function Card({ post, deleteOnePost }) {
             alt="" />
           <p>{nbOfLikes}</p>
         </div>
-      </div>
-      <div>
         {(userInfoCTX.ifAdmin || userId === posterId) && <img
           className='Card__trash'
           src={iconDelete}

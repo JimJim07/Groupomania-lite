@@ -2,10 +2,11 @@
 
 :root {
     --white: #fff;
-    --primary--color: #fd2d01;
-    --secondary--color: #ffd7d7;
-    --light--color: #F9F9FC;
+    --primary--color: rgb(94, 99, 236);
+    --secondary--color: rgba(139, 94, 236, 0.8);
+    --light--color: #f1f1f1;
     --tertiary--color: #4e5166;
+    --borderRadius: 10px;
 }
 
 *,
@@ -23,4 +24,13 @@ html {
 body {
     font-family: 'Lato', sans-serif;
     font-size: 1.6em;
+    background-color: #eee;
+}
+
+img {
+    max-width: 100%;
+}
+
+button {
+    font-size: 1.6rem;
 }

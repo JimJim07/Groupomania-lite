@@ -1,18 +1,18 @@
 .Header {
+    position: fixed;
+    top: 0;
+    width: 100%;
     background-color: var(--primary--color);
-    min-height: 15rem;
     display: flex;
     flex-wrap: wrap;
-    padding: 0.5rem;
+    padding: 2rem 5rem;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 5rem;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
 }
 
 .Header__img {
-    width: 100%;
-    max-width: 40rem;
-    padding-left: 2rem;
+    max-width: 25rem;
 }
 
 .Header__container--user {
@@ -23,20 +23,25 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    color: var(--white);
+    font-size: 2rem;
 }
 
 .Header__btn {
     text-decoration: none;
-    color: var(white);
+    color: var(--white);
     padding: .8rem;
-    border-radius: 1rem;
+    border-radius: var(--borderRadius);
+    border: 1px solid rgba(0, 0, 0, 0.3);
     margin: 0 1rem;
     background-color: var(--secondary--color);
     cursor: pointer;
+    transition: all 0.4s;
 }
 
 .Header__btn:hover {
     background: var(--white);
+    color: var(--tertiary--color);
 }
 
 @media (max-width: 630px) {

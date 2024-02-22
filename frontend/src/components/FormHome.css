@@ -1,33 +1,41 @@
 .FormHome {
     display: flex;
     flex-direction: column;
-    margin-bottom: 2rem;
+    margin-bottom: 20px;
 }
 
-.FormHome__input {
-    font-size: 1.8rem;
+.FormHome label {
+    margin-bottom: 20px;
+}
+
+.FormHome__input,
+.FormHome__textarea {
+    background-color: var(--white);
     width: 100%;
-    margin-bottom: 1.5rem;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: var(--borderRadius);
+    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.15);
 }
 
 .FormHome__textarea {
-    font-size: 1.8rem;
-    width: 100%;
-    padding: 1rem;
-    margin-bottom: 1rem;
-    font-family: Arial, Helvetica, sans-serif;
+    height: 80px;
+    resize: vertical;
 }
 
 .FormHome__btn {
-    font-size: 1.6rem;
-    padding: 1rem 1.5rem;
-    width: 20rem;
-    background: transparent;
-    border: 1px solid rgba(0, 0, 0, 0.8);
-    border-radius: 3px;
+    padding: 10px 20px;
+    background-color: var(--primary--color);
+    color: white;
+    min-width: 200px;
+    margin: auto;
+    border: none;
+    border-radius: 5px;
     cursor: pointer;
+    transition: background-color 0.3s ease;
+    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.15);
 }
 
 .FormHome__btn:hover {
-    background: var(--light--color);
+    background-color: var(--secondary--color);
 }
